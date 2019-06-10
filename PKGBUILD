@@ -27,6 +27,7 @@ source=( https://hg.cdn.mozilla.net/mozilla-unified/8646ea96944350a9e1b888810870
         0001-bz-1521249.patch
         $pkgname.desktop
         mozilla.cfg.patch
+        67_privileged_about.patch
         git+https://github.com/${_pkgname}-Browser/${_pkgname}.git)
         # "hg+$_repo#tag=FIREFOX_${_pkgver//./_}_RELEASE"
         # ${_repo}/raw-file/default/python/mozboot/bin/bootstrap.py)
@@ -35,23 +36,15 @@ sha256sums=('a3bbe198ec536018a7bfc07c648325fce43397cf747b02f5107d0c198d43fdcf'
             'd0673786a6a1f1b9f6f66a3a1356afa33f1f18f59dabd92bd193c88c52a1d04c'
             'ad6b1bc47687c8f094a0b8dd077b13099d43fc95469b73ec9890e642512d474e'
             '8cbd7ee98fb320b43c661573ce4949a15ef87624baa95848ceebf5e08d459c7f'
+            '55ce087c4b7d9c745ede9d4ad452f57229ec179d84c74817611463b6976f2d6f'
             'SKIP')
-
-# Google API keys (see http://www.chromium.org/developers/how-tos/api-keys)
-# Note: These are for Arch Linux use ONLY. For your own distribution, please
-# get your own set of keys. Feel free to contact foutrelis@archlinux.org for
-# more information.
-# _google_api_key=AIzaSyDwr302FpOSkGRpLlUpPThNTDPbXcIn_FM
-
-# Mozilla API keys (see https://location.services.mozilla.com/api)
-# Note: These are for Arch Linux use ONLY. For your own distribution, please
-# get your own set of keys. Feel free to contact heftig@archlinux.org for
-# more information.
-# _mozilla_api_key=16674381-f021-49de-8622-3021c5942aff
 
 prepare() {
   mkdir mozbuild
   mkdir mozilla-unified
+
+  # hg clone failed / timed out on my machines so we use the bundle
+
   hg init mozilla-unified
   cd mozilla-unified
   hg unbundle ${srcdir}/8646ea96944350a9e1b88881087011c582b94326.zstd-max.hg
@@ -65,13 +58,15 @@ END
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1521249
   patch -Np1 -i ../0001-bz-1521249.patch
 
-  # unlock some prefs
   cd ${srcdir}/${_pkgname}
-  git apply ${srcdir}/mozilla.cfg.patch
+  # unlock some prefs I deem worthy of keeping unlocked
+  # (once installed systemwide, you'd otherwise always have to
+  # sudo around in /usr/lib)
+  patch -Np1 -i ${srcdir}/mozilla.cfg.patch
+  # privilegedabout_process is introduced after 67,
+  # can be removed when switching to 68
+  patch -Np1 -i ${srcdir}/67_privileged_about.patch
   cd ${srcdir}/mozilla-unified
-
-  # echo -n "$_google_api_key" >google-api-key
-  # echo -n "$_mozilla_api_key" >mozilla-api-key
 
   cat >.mozconfig <<END
 ac_add_options --enable-application=browser
@@ -180,8 +175,10 @@ END
     "$pkgdir/usr/share/icons/hicolor/192x192/apps/$pkgname.png"
   install -Dm644 browser/branding/official/content/about-logo@2x.png \
     "$pkgdir/usr/share/icons/hicolor/384x384/apps/$pkgname.png"
+
+  # arch upstream provides a separate svg for this. we don't have that, so let's re-use 16.png
   install -Dm644 browser/branding/${pkgname}/icons/16.png \
-    "$pkgdir/usr/share/icons/hicolor/symbolic/apps/$pkgname-symbolic.svg"
+    "$pkgdir/usr/share/icons/hicolor/symbolic/apps/$pkgname-symbolic.png"
 
   install -Dm644 ../$pkgname.desktop \
     "$pkgdir/usr/share/applications/$pkgname.desktop"
