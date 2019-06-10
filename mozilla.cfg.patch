@@ -1,0 +1,46 @@
+diff --git a/librewolf/mozilla.cfg b/librewolf/mozilla.cfg
+index 7994dbf..f1a8dd3 100644
+--- a/librewolf/mozilla.cfg
++++ b/librewolf/mozilla.cfg
+@@ -363,10 +363,10 @@ lockPref("browser.sessionstore.interval", 60000);
+ // ----------------------------------------------------------------------------------------------------
+ 
+ // Pref : Forms auto fill
+-lockPref("extensions.formautofill.addresses.enabled", false);
+-lockPref("extensions.formautofill.available", "off");
+-lockPref("extensions.formautofill.creditCards.enabled", false);
+-lockPref("extensions.formautofill.heuristics.enabled", false);
++defaultPref("extensions.formautofill.addresses.enabled", false);
++defaultPref("extensions.formautofill.available", "off");
++defaultPref("extensions.formautofill.creditCards.enabled", false);
++defaultPref("extensions.formautofill.heuristics.enabled", false);
+ 
+ // Pref : Require manual intervention to autofill known username/passwords sign-in forms
+ // http://kb.mozillazine.org/Signon.autofillForms
+@@ -1472,7 +1472,7 @@ lockPref("browser.newtabpage.activity-stream.fxaccounts.endpoint", "");
+ // https://accounts.firefox.com/
+ 
+ // Pref :
+-lockPref("extensions.update.url", "");
++defaultPref("extensions.update.url", "");
+ // Default Value
+ // https://versioncheck.addons.mozilla.org/update/VersionCheck.php?reqVersion=
+ // %REQ_VERSION%&id=%ITEM_ID%&version=%ITEM_VERSION%&maxAppVersion=
+@@ -2477,7 +2477,7 @@ lockPref("security.dialog_enable_delay", 700);
+ 
+ // Pref : Opt-out of add-on metadata updates
+ // https://blog.mozilla.org/addons/how-to-opt-out-of-add-on-metadata-updates/
+-lockPref("extensions.getAddons.cache.enabled", false);
++defaultPref("extensions.getAddons.cache.enabled", false);
+ 
+ // Pref : Opt-out of themes (Persona) updates
+ // https://support.mozilla.org/t5/Firefox/how-do-I-prevent-autoamtic-updates-in-a-50-user-environment/td-p/144287
+@@ -2510,7 +2510,7 @@ lockPref("plugin.sessionPermissionNow.intervalInMinutes", 0);
+ 
+ // Pref : Updates addons automatically
+ // https://blog.mozilla.org/addons/how-to-turn-off-add-on-updates/
+-lockPref("extensions.update.enabled", false);
++defaultPref("extensions.update.enabled", false);
+ 
+ // Pref : Enable add-on and certificate blocklists (OneCRL) from Mozilla
+ // Updated at interval defined in extensions.blocklist.interval (default: 86400)
