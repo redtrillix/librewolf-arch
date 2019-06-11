@@ -15,7 +15,7 @@ depends=(gtk3 mozilla-common libxt startup-notification mime-types dbus-glib
          ffmpeg nss ttf-font libpulse)
 makedepends=(unzip zip diffutils python2-setuptools yasm mesa imake inetutils
              xorg-server-xvfb autoconf2.13 rust mercurial clang llvm jack gtk2
-             python nodejs python2-psutil cbindgen nasm git)
+             python nodejs python2-psutil cbindgen nasm git inkscape)
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'libnotify: Notification integration'
             'pulseaudio: Audio support'
@@ -28,6 +28,7 @@ source=( https://hg.cdn.mozilla.net/mozilla-unified/8646ea96944350a9e1b888810870
         $pkgname.desktop
         mozilla.cfg.patch
         67_privileged_about.patch
+        enable_addon_signing.patch
         git+https://github.com/${_pkgname}-Browser/${_pkgname}.git)
         # "hg+$_repo#tag=FIREFOX_${_pkgver//./_}_RELEASE"
         # ${_repo}/raw-file/default/python/mozboot/bin/bootstrap.py)
@@ -35,8 +36,9 @@ source=( https://hg.cdn.mozilla.net/mozilla-unified/8646ea96944350a9e1b888810870
 sha256sums=('a3bbe198ec536018a7bfc07c648325fce43397cf747b02f5107d0c198d43fdcf'
             'd0673786a6a1f1b9f6f66a3a1356afa33f1f18f59dabd92bd193c88c52a1d04c'
             'ad6b1bc47687c8f094a0b8dd077b13099d43fc95469b73ec9890e642512d474e'
-            '8cbd7ee98fb320b43c661573ce4949a15ef87624baa95848ceebf5e08d459c7f'
+            '8d121274fc59243c77424dc633796aaa01f1a55ec98bf0decd34b676ab07ba6f'
             '55ce087c4b7d9c745ede9d4ad452f57229ec179d84c74817611463b6976f2d6f'
+            '64d8141aa43c7ec7cafef26656685d83fc663bcf38cd40428356e2d7ddfb16bc'
             'SKIP')
 
 prepare() {
@@ -66,7 +68,24 @@ END
   # privilegedabout_process is introduced after 67,
   # can be removed when switching to 68
   patch -Np1 -i ${srcdir}/67_privileged_about.patch
+  # keeps addon signing enabled
+  patch -Np1 -i ${srcdir}/enable_addon_signing.patch
   cd ${srcdir}/mozilla-unified
+
+
+  local ICON_FILE_PATH=$srcdir/$_pkgname/branding/icon/icon.svg;
+  local BRANDING_FOLDER_PATH=$srcdir/$_pkgname/${pkgname}_browser/source_files/browser/branding/librewolf;
+
+  # generate icons and moves them to the branding folder
+  echo Generating icons from $ICON_FILE_PATH and moving to $BRANDING_FOLDER_PATH;
+  inkscape --without-gui --file=$ICON_FILE_PATH --export-png=$BRANDING_FOLDER_PATH/default16.png --export-width=16 --export-height=16;
+  inkscape --without-gui --file=$ICON_FILE_PATH --export-png=$BRANDING_FOLDER_PATH/default32.png --export-width=32 --export-height=32;
+  inkscape --without-gui --file=$ICON_FILE_PATH --export-png=$BRANDING_FOLDER_PATH/default48.png --export-width=48 --export-height=48;
+  inkscape --without-gui --file=$ICON_FILE_PATH --export-png=$BRANDING_FOLDER_PATH/default64.png --export-width=64 --export-height=64;
+  inkscape --without-gui --file=$ICON_FILE_PATH --export-png=$BRANDING_FOLDER_PATH/default128.png --export-width=128 --export-height=128;
+  inkscape --without-gui --file=$ICON_FILE_PATH --export-png=$BRANDING_FOLDER_PATH/VisualElements_70.png --export-width=70 --export-height=70;
+  inkscape --without-gui --file=$ICON_FILE_PATH --export-png=$BRANDING_FOLDER_PATH/VisualElements_150.png --export-width=150 --export-height=150;
+
 
   cat >.mozconfig <<END
 ac_add_options --enable-application=browser
@@ -114,8 +133,12 @@ ac_add_options --disable-gconf
 ac_add_options --disable-updater
 END
 
-cp -r ${srcdir}/${_pkgname}/${pkgname}_browser/source_files/{docshell,browser} ./
+  cp -r ${srcdir}/${_pkgname}/${pkgname}_browser/source_files/{docshell,browser} ./
+
+  # workaround for branding-common.mozbuild looking for firefox-branding.js
+  cp browser/branding/librewolf/pref/librewolf-preferences.js browser/branding/librewolf/pref/firefox-branding.js
 }
+
 
 build() {
   cd mozilla-unified
@@ -152,7 +175,7 @@ pref("extensions.autoDisableScopes", 11);
 pref("extensions.shownSelectionUI", true);
 END
 
-  cp -r ${srcdir}/${_pkgname}/${pkgname}/* $pkgdir/usr/lib/$pkgname
+  cp -r ${srcdir}/${_pkgname}/settings/* $pkgdir/usr/lib/$pkgname
 
   _distini="$pkgdir/usr/lib/$pkgname/distribution/distribution.ini"
   install -Dm644 /dev/stdin "$_distini" <<END
@@ -168,16 +191,16 @@ app.partner.archlinux=archlinux
 END
 
   for i in 16 32 48 64 128; do
-    install -Dm644 browser/branding/${pkgname}/icons/$i.png \
+    install -Dm644 browser/branding/${pkgname}/default$i.png \
       "$pkgdir/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png"
   done
-  install -Dm644 browser/branding/official/content/about-logo.png \
+  install -Dm644 browser/branding/librewolf/content/about-logo.png \
     "$pkgdir/usr/share/icons/hicolor/192x192/apps/$pkgname.png"
-  install -Dm644 browser/branding/official/content/about-logo@2x.png \
-    "$pkgdir/usr/share/icons/hicolor/384x384/apps/$pkgname.png"
+  # install -Dm644 browser/branding/official/content/about-logo@2x.png \
+    # "$pkgdir/usr/share/icons/hicolor/384x384/apps/$pkgname.png"
 
   # arch upstream provides a separate svg for this. we don't have that, so let's re-use 16.png
-  install -Dm644 browser/branding/${pkgname}/icons/16.png \
+  install -Dm644 browser/branding/${pkgname}/icons/default16.png \
     "$pkgdir/usr/share/icons/hicolor/symbolic/apps/$pkgname-symbolic.png"
 
   install -Dm644 ../$pkgname.desktop \

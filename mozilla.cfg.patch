@@ -1,7 +1,7 @@
-diff --git a/librewolf/mozilla.cfg b/librewolf/mozilla.cfg
+diff --git a/settings/mozilla.cfg b/settings/mozilla.cfg
 index 7994dbf..f1a8dd3 100644
---- a/librewolf/mozilla.cfg
-+++ b/librewolf/mozilla.cfg
+--- a/settings/mozilla.cfg
++++ b/settings/mozilla.cfg
 @@ -363,10 +363,10 @@ lockPref("browser.sessionstore.interval", 60000);
  // ----------------------------------------------------------------------------------------------------
  
