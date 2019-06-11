@@ -6,7 +6,7 @@ pkgname=librewolf
 _ffname=firefox
 _pkgname=LibreWolf
 pkgver=67.0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Standalone web browser from mozilla.org"
 arch=(x86_64)
 license=(MPL GPL LGPL)
@@ -27,7 +27,6 @@ source=( https://hg.cdn.mozilla.net/mozilla-unified/8646ea96944350a9e1b888810870
         0001-bz-1521249.patch
         $pkgname.desktop
         mozilla.cfg.patch
-        67_privileged_about.patch
         enable_addon_signing.patch
         git+https://github.com/${_pkgname}-Browser/${_pkgname}.git)
         # "hg+$_repo#tag=FIREFOX_${_pkgver//./_}_RELEASE"
@@ -65,9 +64,6 @@ END
   # (once installed systemwide, you'd otherwise always have to
   # sudo around in /usr/lib)
   patch -Np1 -i ${srcdir}/mozilla.cfg.patch
-  # privilegedabout_process is introduced after 67,
-  # can be removed when switching to 68
-  patch -Np1 -i ${srcdir}/67_privileged_about.patch
   # keeps addon signing enabled
   patch -Np1 -i ${srcdir}/enable_addon_signing.patch
   cd ${srcdir}/mozilla-unified
@@ -134,9 +130,6 @@ ac_add_options --disable-updater
 END
 
   cp -r ${srcdir}/${_pkgname}/${pkgname}_browser/source_files/{docshell,browser} ./
-
-  # workaround for branding-common.mozbuild looking for firefox-branding.js
-  cp browser/branding/librewolf/pref/librewolf-preferences.js browser/branding/librewolf/pref/firefox-branding.js
 }
 
 
