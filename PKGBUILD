@@ -6,7 +6,7 @@ pkgname=librewolf
 _ffname=firefox
 _pkgname=LibreWolf
 pkgver=67.0.1
-pkgrel=2
+pkgrel=3
 pkgdesc="Standalone web browser from mozilla.org"
 arch=(x86_64)
 license=(MPL GPL LGPL)
@@ -26,8 +26,7 @@ _repo=https://hg.mozilla.org/mozilla-unified
 source=( https://hg.cdn.mozilla.net/mozilla-unified/8646ea96944350a9e1b88881087011c582b94326.zstd-max.hg
         0001-bz-1521249.patch
         $pkgname.desktop
-        mozilla.cfg.patch
-        enable_addon_signing.patch
+        $pkgname.cfg.patch
         git+https://github.com/${_pkgname}-Browser/${_pkgname}.git)
         # "hg+$_repo#tag=FIREFOX_${_pkgver//./_}_RELEASE"
         # ${_repo}/raw-file/default/python/mozboot/bin/bootstrap.py)
@@ -35,9 +34,7 @@ source=( https://hg.cdn.mozilla.net/mozilla-unified/8646ea96944350a9e1b888810870
 sha256sums=('a3bbe198ec536018a7bfc07c648325fce43397cf747b02f5107d0c198d43fdcf'
             'd0673786a6a1f1b9f6f66a3a1356afa33f1f18f59dabd92bd193c88c52a1d04c'
             'ad6b1bc47687c8f094a0b8dd077b13099d43fc95469b73ec9890e642512d474e'
-            '8d121274fc59243c77424dc633796aaa01f1a55ec98bf0decd34b676ab07ba6f'
-            '55ce087c4b7d9c745ede9d4ad452f57229ec179d84c74817611463b6976f2d6f'
-            '64d8141aa43c7ec7cafef26656685d83fc663bcf38cd40428356e2d7ddfb16bc'
+            'd7bfe3477cac1d13b04258d232816381a899f0c6c2f571846a5353d710fe6969'
             'SKIP')
 
 prepare() {
@@ -63,14 +60,12 @@ END
   # unlock some prefs I deem worthy of keeping unlocked
   # (once installed systemwide, you'd otherwise always have to
   # sudo around in /usr/lib)
-  patch -Np1 -i ${srcdir}/mozilla.cfg.patch
-  # keeps addon signing enabled
-  patch -Np1 -i ${srcdir}/enable_addon_signing.patch
+  patch -Np1 -i ${srcdir}/${pkgname}.cfg.patch
   cd ${srcdir}/mozilla-unified
 
 
   local ICON_FILE_PATH=$srcdir/$_pkgname/branding/icon/icon.svg;
-  local BRANDING_FOLDER_PATH=$srcdir/$_pkgname/${pkgname}_browser/source_files/browser/branding/librewolf;
+  local BRANDING_FOLDER_PATH=$srcdir/$_pkgname/browser/source_files/browser/branding/librewolf;
 
   # generate icons and moves them to the branding folder
   echo Generating icons from $ICON_FILE_PATH and moving to $BRANDING_FOLDER_PATH;
@@ -106,7 +101,6 @@ ac_add_options --with-app-name=${pkgname}
 ac_add_options --with-app-basename=${_pkgname}
 ac_add_options --with-branding=browser/branding/${pkgname}
 ac_add_options --with-distribution-id=io.github.${pkgname}
-# export MOZILLA_OFFICIAL=0
 export MOZ_APP_REMOTINGNAME=${_pkgname//-/}
 # export MOZ_TELEMETRY_REPORTING=0
 export MOZ_REQUIRE_SIGNING=1
@@ -129,7 +123,7 @@ ac_add_options --disable-gconf
 ac_add_options --disable-updater
 END
 
-  cp -r ${srcdir}/${_pkgname}/${pkgname}_browser/source_files/{docshell,browser} ./
+  cp -r ${srcdir}/${_pkgname}/browser/source_files/{docshell,browser} ./
 }
 
 
@@ -168,7 +162,7 @@ pref("extensions.autoDisableScopes", 11);
 pref("extensions.shownSelectionUI", true);
 END
 
-  cp -r ${srcdir}/${_pkgname}/settings/* $pkgdir/usr/lib/$pkgname
+  cp -r ${srcdir}/${_pkgname}/settings/settings/* $pkgdir/usr/lib/$pkgname
 
   _distini="$pkgdir/usr/lib/$pkgname/distribution/distribution.ini"
   install -Dm644 /dev/stdin "$_distini" <<END
