@@ -187,7 +187,7 @@ END
     # "$pkgdir/usr/share/icons/hicolor/384x384/apps/$pkgname.png"
 
   # arch upstream provides a separate svg for this. we don't have that, so let's re-use 16.png
-  install -Dm644 browser/branding/${pkgname}/icons/default16.png \
+  install -Dm644 browser/branding/${pkgname}/default16.png \
     "$pkgdir/usr/share/icons/hicolor/symbolic/apps/$pkgname-symbolic.png"
 
   install -Dm644 ../$pkgname.desktop \
