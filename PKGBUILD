@@ -3,10 +3,9 @@
 # Contributor: Jakub Schmidtke <sjakub@gmail.com>
 
 pkgname=librewolf
-_ffname=firefox
 _pkgname=LibreWolf
 pkgver=67.0.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Standalone web browser from mozilla.org"
 arch=(x86_64)
 license=(MPL GPL LGPL)
@@ -27,7 +26,7 @@ source=( https://hg.cdn.mozilla.net/mozilla-unified/8646ea96944350a9e1b888810870
         0001-bz-1521249.patch
         $pkgname.desktop
         $pkgname.cfg.patch
-        git+https://github.com/${_pkgname}-Browser/${_pkgname}.git)
+        git+https://gitlab.com/${pkgname}-community/${pkgname}.git)
         # "hg+$_repo#tag=FIREFOX_${_pkgver//./_}_RELEASE"
         # ${_repo}/raw-file/default/python/mozboot/bin/bootstrap.py)
         #  firefox-symbolic.svg
@@ -56,7 +55,7 @@ END
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1521249
   patch -Np1 -i ../0001-bz-1521249.patch
 
-  cd ${srcdir}/${_pkgname}
+  cd ${srcdir}/${pkgname}
   # unlock some prefs I deem worthy of keeping unlocked
   # (once installed systemwide, you'd otherwise always have to
   # sudo around in /usr/lib)
@@ -64,8 +63,8 @@ END
   cd ${srcdir}/mozilla-unified
 
 
-  local ICON_FILE_PATH=$srcdir/$_pkgname/branding/icon/icon.svg;
-  local BRANDING_FOLDER_PATH=$srcdir/$_pkgname/browser/source_files/browser/branding/librewolf;
+  local ICON_FILE_PATH=$srcdir/$pkgname/branding/icon/icon.svg;
+  local BRANDING_FOLDER_PATH=$srcdir/$pkgname/browser/source_files/browser/branding/librewolf;
 
   # generate icons and moves them to the branding folder
   echo Generating icons from $ICON_FILE_PATH and moving to $BRANDING_FOLDER_PATH;
@@ -123,7 +122,7 @@ ac_add_options --disable-gconf
 ac_add_options --disable-updater
 END
 
-  cp -r ${srcdir}/${_pkgname}/browser/source_files/{docshell,browser} ./
+  cp -r ${srcdir}/${pkgname}/browser/source_files/{docshell,browser} ./
 }
 
 
@@ -162,7 +161,7 @@ pref("extensions.autoDisableScopes", 11);
 pref("extensions.shownSelectionUI", true);
 END
 
-  cp -r ${srcdir}/${_pkgname}/settings/settings/* $pkgdir/usr/lib/$pkgname
+  cp -r ${srcdir}/${pkgname}/settings/settings/* $pkgdir/usr/lib/$pkgname
 
   _distini="$pkgdir/usr/lib/$pkgname/distribution/distribution.ini"
   install -Dm644 /dev/stdin "$_distini" <<END
@@ -196,13 +195,13 @@ END
   # Install a wrapper to avoid confusion about binary path
   install -Dm755 /dev/stdin "$pkgdir/usr/bin/$pkgname" <<END
 #!/bin/sh
-exec /usr/lib/$pkgname/firefox "\$@"
+exec /usr/lib/$pkgname/librewolf "\$@"
 END
 
   # Replace duplicate binary with wrapper
   # https://bugzilla.mozilla.org/show_bug.cgi?id=658850
   ln -srf "$pkgdir/usr/bin/$pkgname" \
-    "$pkgdir/usr/lib/$pkgname/firefox-bin"
+    "$pkgdir/usr/lib/$pkgname/librewolf-bin"
 }
 
 # vim:set sw=2 et:
