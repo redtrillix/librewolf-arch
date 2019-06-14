@@ -5,9 +5,9 @@
 
 pkgname=librewolf
 _pkgname=LibreWolf
-pkgver=67.0.1
-_bundle=8646ea96944350a9e1b88881087011c582b94326
-pkgrel=5
+pkgver=67.0.2
+_bundle=c9edc4fbdfc8a0a5656e43d0afda6df03b93de7c
+pkgrel=1
 pkgdesc="Community-maintained fork of Librefox: a privacy and security-focused browser"
 arch=(x86_64)
 license=(MPL GPL LGPL)
@@ -24,15 +24,13 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'hunspell-en_US: Spell checking, American English')
 options=(!emptydirs !makeflags)
 _repo=https://hg.mozilla.org/mozilla-unified
-source=( https://hg.cdn.mozilla.net/mozilla-unified/${_bundle}.zstd-max.hg
-        0001-bz-1521249.patch
+source=(https://hg.cdn.mozilla.net/mozilla-unified/${_bundle}.zstd-max.hg
+        "0001-bz-1521249.patch::https://git.archlinux.org/svntogit/packages.git/plain/trunk/0001-bz-1521249.patch?h=packages/firefox"
         $pkgname.desktop
         $pkgname.cfg.patch
         git+https://gitlab.com/${pkgname}-community/${pkgname}.git)
         # "hg+$_repo#tag=FIREFOX_${_pkgver//./_}_RELEASE"
-        # ${_repo}/raw-file/default/python/mozboot/bin/bootstrap.py)
-        #  firefox-symbolic.svg
-sha256sums=('a3bbe198ec536018a7bfc07c648325fce43397cf747b02f5107d0c198d43fdcf'
+sha256sums=('a27eda97cfbc546bd156249490e72ef5cbb96a1d5921efa1131b565bcc938c0c'
             'd0673786a6a1f1b9f6f66a3a1356afa33f1f18f59dabd92bd193c88c52a1d04c'
             'ad6b1bc47687c8f094a0b8dd077b13099d43fc95469b73ec9890e642512d474e'
             '4c09f4e90003a063d9a3aaf100ecb7872c0a4ffbe0a5271640553418471902eb'
