@@ -1,15 +1,17 @@
-# Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
+# Maintainer: lsf
+# Contributor: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 # Contributor: Ionut Biru <ibiru@archlinux.org>
 # Contributor: Jakub Schmidtke <sjakub@gmail.com>
 
 pkgname=librewolf
 _pkgname=LibreWolf
 pkgver=67.0.1
-pkgrel=4
-pkgdesc="Standalone web browser from mozilla.org"
+_bundle=8646ea96944350a9e1b88881087011c582b94326
+pkgrel=5
+pkgdesc="Community-maintained fork of Librefox: a privacy and security-focused browser"
 arch=(x86_64)
 license=(MPL GPL LGPL)
-url="https://www.mozilla.org/firefox/"
+url="https://LibreWolf.gitlab.io"
 depends=(gtk3 mozilla-common libxt startup-notification mime-types dbus-glib
          ffmpeg nss ttf-font libpulse)
 makedepends=(unzip zip diffutils python2-setuptools yasm mesa imake inetutils
@@ -22,7 +24,7 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'hunspell-en_US: Spell checking, American English')
 options=(!emptydirs !makeflags)
 _repo=https://hg.mozilla.org/mozilla-unified
-source=( https://hg.cdn.mozilla.net/mozilla-unified/8646ea96944350a9e1b88881087011c582b94326.zstd-max.hg
+source=( https://hg.cdn.mozilla.net/mozilla-unified/${_bundle}.zstd-max.hg
         0001-bz-1521249.patch
         $pkgname.desktop
         $pkgname.cfg.patch
@@ -33,18 +35,17 @@ source=( https://hg.cdn.mozilla.net/mozilla-unified/8646ea96944350a9e1b888810870
 sha256sums=('a3bbe198ec536018a7bfc07c648325fce43397cf747b02f5107d0c198d43fdcf'
             'd0673786a6a1f1b9f6f66a3a1356afa33f1f18f59dabd92bd193c88c52a1d04c'
             'ad6b1bc47687c8f094a0b8dd077b13099d43fc95469b73ec9890e642512d474e'
-            'd7bfe3477cac1d13b04258d232816381a899f0c6c2f571846a5353d710fe6969'
+            '4c09f4e90003a063d9a3aaf100ecb7872c0a4ffbe0a5271640553418471902eb'
             'SKIP')
 
 prepare() {
   mkdir mozbuild
   mkdir mozilla-unified
 
-  # hg clone failed / timed out on my machines so we use the bundle
-
+  # hg clone failed / timed out on my machines so we use a bundle
   hg init mozilla-unified
   cd mozilla-unified
-  hg unbundle ${srcdir}/8646ea96944350a9e1b88881087011c582b94326.zstd-max.hg
+  hg unbundle ${srcdir}/${_bundle}.zstd-max.hg
   cat > .hg/hgrc <<END
 [paths]
 default = https://hg.mozilla.org/mozilla-unified/
@@ -55,12 +56,16 @@ END
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1521249
   patch -Np1 -i ../0001-bz-1521249.patch
 
-  cd ${srcdir}/${pkgname}
+  # NOTE:
   # unlock some prefs I deem worthy of keeping unlocked
-  # (once installed systemwide, you'd otherwise always have to
-  # sudo around in /usr/lib)
-  patch -Np1 -i ${srcdir}/${pkgname}.cfg.patch
-  cd ${srcdir}/mozilla-unified
+  # (with librewolf installed systemwide, you'd otherwise always have to sudo around in /usr/lib)
+  # it mainly keeps addon update / install settings / urls unlocked
+  # as well as form fill settings
+  # uncomment it if you are OK with a slight potential decrease in privacy
+
+  # cd ${srcdir}/${pkgname}
+  # patch -Np1 -i ${srcdir}/${pkgname}.cfg.patch
+  # cd ${srcdir}/mozilla-unified
 
 
   local ICON_FILE_PATH=$srcdir/$pkgname/branding/icon/icon.svg;
@@ -136,6 +141,8 @@ build() {
   # LTO needs more open files
   ulimit -n 4096
 
+  # optional: use fewer cores when building
+  # export MOZ_MAKE_FLAGS="-j2"
   xvfb-run -a -n 97 -s "-screen 0 1600x1200x24" ./mach build
   ./mach buildsymbols
 }
@@ -182,8 +189,6 @@ END
   done
   install -Dm644 browser/branding/librewolf/content/about-logo.png \
     "$pkgdir/usr/share/icons/hicolor/192x192/apps/$pkgname.png"
-  # install -Dm644 browser/branding/official/content/about-logo@2x.png \
-    # "$pkgdir/usr/share/icons/hicolor/384x384/apps/$pkgname.png"
 
   # arch upstream provides a separate svg for this. we don't have that, so let's re-use 16.png
   install -Dm644 browser/branding/${pkgname}/default16.png \
