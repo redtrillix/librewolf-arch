@@ -1,0 +1,71 @@
+image: archlinux/base:latest
+
+variables:
+  REPONAME: "librewolf"
+  REPODIR: "$CI_PROJECT_DIR"
+  GET_SOURCES_ATTEMPTS: 5
+  XZ_DEFAULTS: "-T 0"
+
+
+cache:
+    key: "${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}"
+
+
+before_script:
+    # - pacman -Syu --noconfirm
+  - pacman-key --init
+  - pacman-key --populate archlinux
+
+  # update mirrorlist to D
+  # - pacman -Sy --noconfirm reflector
+  # - reflector --latest 20 --sort rate --country Germany --save /etc/pacman.d/mirrorlist
+
+  - pacman --noconfirm -Syu --needed base-devel
+
+  # this is a very ugly fix for recent makepkg-5.1-chmod-shenanigans, which fuck up the build process in docker
+  - sed -E -i 's/^chmod a-s \"\$BUILDDIR\"$/# chmod a-s \"\$BUILDDIR\"/' `which makepkg`
+
+  # flex 2.6.3 is severly broken / incompatible
+  # see e.g. https://github.com/westes/flex/issues/162
+  # - "if [[ $( pacman -Q flex ) == *2.6.3* ]]; then
+       # curl https://archive.archlinux.org/packages/f/flex/flex-2.6.1-1-x86_64.pkg.tar.xz -o /tmp/flex-2.6.1-1-x86_64.pkg.tar.xz;
+       # pacman --noconfirm -U /tmp/flex-2.6.1-1-x86_64.pkg.tar.xz;
+     # fi"
+
+  # The repository build script is run by user 'nobody'. The build scripts needs
+  # to install dependencies using pacman. This requires root permissions.
+  # (Note: the build script itself can't be run as root, as makepkg would
+  # complain)
+  - "echo 'nobody ALL=(ALL) NOPASSWD: /usr/bin/pacman' >> /etc/sudoers"
+
+  # a writable home-directory is needed by import-validpgpkeys.sh
+  - mkdir -p /home/nobody && chown -R nobody /home/nobody
+  - usermod -d /home/nobody nobody
+
+  # import pgp keys flagged as valid
+  - sudo -u nobody -E -H .build-bin/import-validpgpkeys.sh
+
+
+build_repo:
+  script:
+    # the build script can't be run as root, as makepkg would complain...
+    - sudo -u nobody -E -H .build-bin/build.sh
+
+    # prepare & publish repository index
+    # -> pacman expects files without tar.xz prefix,
+    #    replace existing symlinks for artifacts upload (only)
+    #    keep symlinks when building locally without artifact upload
+    - sudo -u nobody -E -H .build-bin/deploy.sh
+    - "if [[ -n $CI_PROJECT_URL ]]; then
+         mv --force $REPONAME.db.tar.xz $REPONAME.db; fi"
+    - "if [[ -n $CI_PROJECT_URL ]]; then
+         mv --force $REPONAME.files.tar.xz $REPONAME.files; fi"
+
+  artifacts:
+    # expire artifacts per default - the gitlab web frontend can be used to keep
+    # artifacts of interest for an unlimited time
+    expire_in: 1 year
+    paths:
+      # - "$REPONAME.db"
+      # - "$REPONAME.files"
+      - "*.pkg.tar.xz"
