@@ -23,7 +23,6 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech'
             'hunspell-en_US: Spell checking, American English')
 options=(!emptydirs !makeflags)
-install='librewolf.install'
 _repo=https://hg.mozilla.org/mozilla-unified
 source=(https://hg.cdn.mozilla.net/mozilla-unified/${_bundle}.zstd-max.hg
         "0001-bz-1521249.patch::https://git.archlinux.org/svntogit/packages.git/plain/trunk/0001-bz-1521249.patch?h=packages/firefox"
@@ -62,9 +61,9 @@ END
   # as well as form fill settings
   # uncomment it if you are OK with a slight potential decrease in privacy
 
-  cd ${srcdir}/${pkgname}
-  patch -Np1 -i ${srcdir}/${pkgname}.cfg.patch
-  cd ${srcdir}/mozilla-unified
+  # cd ${srcdir}/${pkgname}
+  # patch -Np1 -i ${srcdir}/${pkgname}.cfg.patch
+  # cd ${srcdir}/mozilla-unified
 
 
   local ICON_FILE_PATH=$srcdir/$pkgname/branding/icon/icon.svg;
