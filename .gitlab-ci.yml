@@ -69,3 +69,5 @@ build_repo:
       # - "$REPONAME.db"
       # - "$REPONAME.files"
       - "*.pkg.tar.xz"
+  tags:
+    - build
