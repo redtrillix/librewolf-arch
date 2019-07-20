@@ -15,7 +15,7 @@ depends=(gtk3 mozilla-common libxt startup-notification mime-types dbus-glib
          ffmpeg nss ttf-font libpulse)
 makedepends=(unzip zip diffutils python2-setuptools yasm mesa imake inetutils
              xorg-server-xvfb autoconf2.13 rust clang llvm jack gtk2
-             python nodejs python2-psutil cbindgen nasm git inkscape)
+             python nodejs python2-psutil cbindgen nasm git inkscape binutils)
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'libnotify: Notification integration'
             'pulseaudio: Audio support'
@@ -130,6 +130,8 @@ mk_add_options MOZ_CRASHREPORTER=0
 mk_add_options MOZ_DATA_REPORTING=0
 mk_add_options MOZ_SERVICES_HEALTHREPORT=0
 mk_add_options MOZ_TELEMETRY_REPORTING=0
+mk_add_options MOZ_MAKE_FLAGS="-j1"
+ac_add_options --enable-linker=gold
 END
 
   cp -r ${srcdir}/${pkgname}/browser/common/source_files/browser ./
@@ -150,7 +152,7 @@ build() {
   ulimit -n 4096
 
   # optional: use fewer cores when building
-  export MOZ_MAKE_FLAGS="-j2"
+  # export MOZ_MAKE_FLAGS="-j1"
   xvfb-run -a -n 97 -s "-screen 0 1600x1200x24" ./mach build
   ./mach buildsymbols
 }
