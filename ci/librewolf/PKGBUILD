@@ -149,7 +149,7 @@ build() {
   # LTO needs more open files
   ulimit -n 4096
 
-  optional: use fewer cores when building
+  # optional: use fewer cores when building
   export MOZ_MAKE_FLAGS="-j2"
   xvfb-run -a -n 97 -s "-screen 0 1600x1200x24" ./mach build
   ./mach buildsymbols
