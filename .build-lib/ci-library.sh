@@ -87,7 +87,7 @@ function _build_add() {
 #   adds the names of all subdirectories containing a PKGBUILD file to the
 #   $PACKAGES array
 function list_packages() {
-    for p in $(ls pkgs/**/PKGBUILD); do
+    for p in $(ls ci/**/PKGBUILD); do
         PACKAGES+=(${p/%\/PKGBUILD/})
     done
 }
@@ -124,13 +124,8 @@ function build_packages() {
     for p in "${PACKAGES[@]}"; do
         cd $p
         _log command "Building pkg: $p"
-        if [[ "$p" == "pkgs/tar-multi" ]]; then
-            PKGEXT=".pkg.tar.xz" PKGDEST="$REPODIR" \
-                _do makepkg --noconfirm --nosign --syncdeps --cleanbuild --skippgpcheck
-        else
-            PKGEXT=".pkg.tar.xz" PKGDEST="$REPODIR" \
-                _do makepkg --install --noconfirm --nosign --syncdeps --cleanbuild --skippgpcheck
-        fi
+        PKGEXT=".pkg.tar.xz" PKGDEST="$REPODIR" \
+            _do makepkg --install --noconfirm --nosign --syncdeps --cleanbuild --skippgpcheck
         cd - > /dev/null
     done
 
