@@ -71,3 +71,5 @@ build_repo:
       - "*.pkg.tar.xz"
   tags:
     - build
+  only:
+    - tags
