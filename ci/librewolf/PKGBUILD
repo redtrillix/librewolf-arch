@@ -111,7 +111,7 @@ ac_add_options --with-distribution-id=io.gitlab.${pkgname}
 ac_add_options --with-unsigned-addon-scopes=app,system
 # export MOZ_APP_REMOTINGNAME=${_pkgname//-/}
 # export MOZ_TELEMETRY_REPORTING=0
-export MOZ_REQUIRE_SIGNING=1
+export MOZ_REQUIRE_SIGNING=0
 
 # System libraries
 ac_add_options --with-system-nspr
