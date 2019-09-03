@@ -22,8 +22,6 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech'
             'hunspell-en_US: Spell checking, American English')
 options=(!emptydirs !makeflags !strip)
-_COMMON_REPO='https://gitlab.com/librewolf-community/browser/common.git'
-_SETTINGS_REPO='https://gitlab.com/librewolf-community/settings.git'
 
 install='librewolf.install'
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
@@ -113,7 +111,7 @@ END
 
   # cp -r ${srcdir}/${pkgname}/browser/common/source_files/browser ./
 
-  cp -r ${scrdir}/common/source_files/* ./
+  cp -r ${srcdir}/common/source_files/* ./
 
 
   # Disabling Pocket
