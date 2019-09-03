@@ -51,7 +51,7 @@ prepare() {
   # uncomment it if you are OK with a slight potential decrease in privacy,
   # or even better: check what I'm doing there.
 
-  cd ${srcdir}/common
+  cd ${srcdir}/settings
   patch -Np1 -i ${srcdir}/${pkgname}.cfg.patch
   cd ${srcdir}/firefox-$pkgver
 
