@@ -109,8 +109,8 @@ mk_add_options MOZ_MAKE_FLAGS="-j2"
 ac_add_options --enable-linker=gold
 END
 
-  # cp -r ${srcdir}/${pkgname}/browser/common/source_files/browser ./
 
+  rm -f ${srcdir}/common/source_files/mozconfig ./
   cp -r ${srcdir}/common/source_files/* ./
 
 
