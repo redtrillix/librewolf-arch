@@ -110,7 +110,7 @@ ac_add_options --enable-linker=gold
 END
 
 
-  rm -f ${srcdir}/common/source_files/mozconfig ./
+  rm -f ${srcdir}/common/source_files/mozconfig
   cp -r ${srcdir}/common/source_files/* ./
 
 
