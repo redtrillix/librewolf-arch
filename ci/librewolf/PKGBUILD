@@ -152,7 +152,7 @@ END
     xvfb-run -a -n 92 -s "-screen 0 1600x1200x24" \
     ./mach python build/pgo/profileserver.py
 
-  if ! compgen -G '*.profraw' >&2; then
+  if [[ ! -s merged.profdata ]]; then
     error "No profile data produced."
     return 1
   fi
@@ -170,7 +170,7 @@ END
   cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-lto=cross
 ac_add_options --enable-profile-use=cross
-ac_add_options --with-pgo-profile-path=${PWD@Q}
+ac_add_options --with-pgo-profile-path=${PWD@Q}/merged.profdata
 ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
 END
   ./mach build
