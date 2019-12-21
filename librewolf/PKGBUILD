@@ -8,7 +8,7 @@ _pkgname=LibreWolf
 pkgver=71.0
 pkgrel=1
 pkgdesc="Community-maintained fork of Librefox: a privacy and security-focused browser"
-arch=(x86_64)
+arch=(aarch64)
 license=(MPL GPL LGPL)
 url="https://LibreWolf.gitlab.io"
 depends=(gtk3 libxt startup-notification mime-types dbus-glib ffmpeg nss
@@ -23,12 +23,16 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'hunspell-en_US: Spell checking, American English')
 options=(!emptydirs !makeflags !strip)
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
+        https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/arm.patch
+        https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch
         $pkgname.desktop
         $pkgname.cfg.patch
         "mozinfo_py38.patch::https://git.archlinux.org/svntogit/packages.git/plain/trunk/0001-Bug-1212502-Switch-mozinfo-to-using-the-distro-packa.patch?h=packages/firefox"
         "git+https://gitlab.com/${pkgname}-community/browser/common.git"
         "git+https://gitlab.com/${pkgname}-community/settings.git")
 sha256sums=('78304cd58229e7103b56b34718aad051c9a4db30c266512a64f501ba58da7fbe'
+            '5a083752d3d2845fa0f84e41fbe38e41cb741ee584434c0b95dace5cbc8c340b'
+            '2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9'
             '0471d32366c6f415f7608b438ddeb10e2f998498c389217cdd6cc52e8249996b'
             'e03332f0e865949df5af9c231a364e9e1068fca0439621b98c2d4160d93e674f'
             '33f5aec0bba83b23410176c5351425d2ad949d7f0bf409a579be25bebb773fce'
@@ -52,9 +56,9 @@ prepare() {
   # uncomment it if you are OK with a slight potential decrease in privacy,
   # or even better: check what I'm doing there.
 
-  # cd ${srcdir}/${pkgname}
-  # patch -Np1 -i ${srcdir}/${pkgname}.cfg.patch
-  # cd ${srcdir}/firefox-$pkgver
+  cd ${srcdir}/settings
+  patch -Np1 -i ${srcdir}/${pkgname}.cfg.patch
+  cd ${srcdir}/firefox-$pkgver
 
   cat >../mozconfig <<END
 ac_add_options --enable-application=browser
@@ -66,12 +70,14 @@ ac_add_options --disable-debug
 ac_add_options --prefix=/usr
 ac_add_options --enable-release
 ac_add_options --enable-hardening
-ac_add_options --enable-optimize
+ac_add_options --enable-optimize="-O2"
 ac_add_options --enable-rust-simd
 # ac_add_options --enable-lto
 # export MOZ_PGO=1
-export CC='clang --target=x86_64-unknown-linux-gnu'
-export CXX='clang++ --target=x86_64-unknown-linux-gnu'
+# export CC='clang --target=aarch64-unknown-linux-gnu'
+# export CXX='clang++ --target=aarch64-unknown-linux-gnu'
+export CC='clang'
+export CXX='clang++'
 export AR=llvm-ar
 export NM=llvm-nm
 export RANLIB=llvm-ranlib
@@ -87,6 +93,8 @@ ac_add_options --with-unsigned-addon-scopes=app,system
 # export MOZ_APP_REMOTINGNAME=${_pkgname//-/}
 # export MOZ_TELEMETRY_REPORTING=0
 export MOZ_REQUIRE_SIGNING=0
+# ALARM
+ac_add_options --disable-webrtc
 
 # System libraries
 ac_add_options --with-system-nspr
@@ -108,10 +116,14 @@ mk_add_options MOZ_SERVICES_HEALTHREPORT=0
 mk_add_options MOZ_TELEMETRY_REPORTING=0
 
 # options for ci / weaker build systems
-# mk_add_options MOZ_MAKE_FLAGS="-j2"
+mk_add_options MOZ_MAKE_FLAGS="-j4"
 # ac_add_options --enable-linker=gold
 END
 
+
+  LDFLAGS+=" -Wl,--no-keep-memory -Wl,--reduce-memory-overheads"
+  patch -p1 -i ../arm.patch
+  patch -p1 -i ../build-arm-libopus.patch
 
   rm -f ${srcdir}/common/source_files/mozconfig
   cp -r ${srcdir}/common/source_files/* ./
@@ -132,45 +144,12 @@ build() {
   # LTO needs more open files
   ulimit -n 4096
 
-  # -fno-plt with cross-LTO causes obscure LLVM errors
-  # LLVM ERROR: Function Import: link error
-  CFLAGS="${CFLAGS/-fno-plt/}"
-  CXXFLAGS="${CXXFLAGS/-fno-plt/}"
-
-  # Do 3-tier PGO
-  msg2 "Building instrumented browser..."
-  cat >.mozconfig ../mozconfig - <<END
-ac_add_options --enable-profile-generate=cross
-END
-  ./mach build
-
-  msg2 "Profiling instrumented browser..."
-  ./mach package
-  LLVM_PROFDATA=llvm-profdata \
-    JARLOG_FILE="$PWD/jarlog" \
-    xvfb-run -a -n 92 -s "-screen 0 1600x1200x24" \
-    ./mach python build/pgo/profileserver.py
-
-  if [[ ! -s merged.profdata ]]; then
-    error "No profile data produced."
-    return 1
-  fi
-
-  if [[ ! -s jarlog ]]; then
-    error "No jar log produced."
-    return 1
-  fi
-
-  msg2 "Removing instrumented browser..."
-  ./mach clobber
-
   msg2 "Building optimized browser..."
-  # xvfb-run -a -n 97 -s "-screen 0 1600x1200x24" ./mach build
   cat >.mozconfig ../mozconfig - <<END
-ac_add_options --enable-lto=cross
-ac_add_options --enable-profile-use=cross
-ac_add_options --with-pgo-profile-path=${PWD@Q}/merged.profdata
-ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
+# ac_add_options --enable-lto=cross
+# ac_add_options --enable-profile-use=cross
+# ac_add_options --with-pgo-profile-path=${PWD@Q}/merged.profdata
+# ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
 END
   ./mach build
 
@@ -181,7 +160,6 @@ END
 package() {
   cd firefox-$pkgver
   DESTDIR="$pkgdir" ./mach install
-  # find . -name '*crashreporter-symbols-full.zip' -exec cp -fvt "$startdir" {} +
 
   local vendorjs="$pkgdir/usr/lib/$pkgname/browser/defaults/preferences/vendor.js"
   install -Dvm644 /dev/stdin "$vendorjs" <<END
