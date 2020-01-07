@@ -31,7 +31,6 @@ source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-
 sha256sums=('6473b2d854828b5d3dbe4b01093e8993141de7707d5d01eb32bd16a469b46708'
             '0471d32366c6f415f7608b438ddeb10e2f998498c389217cdd6cc52e8249996b'
             'e03332f0e865949df5af9c231a364e9e1068fca0439621b98c2d4160d93e674f'
-            '33f5aec0bba83b23410176c5351425d2ad949d7f0bf409a579be25bebb773fce'
             'SKIP'
             'SKIP')
 prepare() {
