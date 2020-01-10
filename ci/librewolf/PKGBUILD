@@ -104,7 +104,7 @@ mk_add_options MOZ_SERVICES_HEALTHREPORT=0
 mk_add_options MOZ_TELEMETRY_REPORTING=0
 
 # options for ci / weaker build systems
-# mk_add_options MOZ_MAKE_FLAGS="-j2"
+mk_add_options MOZ_MAKE_FLAGS="-j2"
 ac_add_options --enable-linker=gold
 END
 
