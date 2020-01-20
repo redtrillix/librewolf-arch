@@ -5,7 +5,7 @@
 
 pkgname=librewolf
 _pkgname=LibreWolf
-pkgver=72.0.1
+pkgver=72.0.2
 pkgrel=1
 pkgdesc="Community-maintained fork of Librefox: a privacy and security-focused browser"
 arch=(aarch64)
@@ -29,7 +29,7 @@ source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-
         $pkgname.cfg.patch
         "git+https://gitlab.com/${pkgname}-community/browser/common.git"
         "git+https://gitlab.com/${pkgname}-community/settings.git")
-sha256sums=('1fa59aedc8469c3e6ffb12449ab7de2f93776f7679eedebfb74aa309b694956f'
+sha256sums=('77fd224bea885172d757aef587ad443f2171aa84e4297bca55df91a1951be389'
             '5a083752d3d2845fa0f84e41fbe38e41cb741ee584434c0b95dace5cbc8c340b'
             '2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9'
             '0471d32366c6f415f7608b438ddeb10e2f998498c389217cdd6cc52e8249996b'
@@ -65,9 +65,17 @@ ac_add_options --disable-debug
 ac_add_options --prefix=/usr
 ac_add_options --enable-release
 ac_add_options --enable-hardening
-ac_add_options --enable-optimize="-O2"
+# ac_add_options --enable-optimize="-O2"
 ac_add_options --enable-rust-simd
-# ac_add_options --enable-lto
+
+# taken from manjaro build:
+ac_add_options --enable-lto
+ac_add_options --enable-optimize="-g0 -O2"
+export MOZ_DEBUG_FLAGS=" "
+export CFLAGS+=" -g0"
+export CXXFLAGS+=" -g0"
+export RUSTFLAGS="-Cdebuginfo=0"
+
 # export MOZ_PGO=1
 # export CC='clang --target=aarch64-unknown-linux-gnu'
 # export CXX='clang++ --target=aarch64-unknown-linux-gnu'
@@ -139,7 +147,7 @@ build() {
   # LTO needs more open files
   ulimit -n 4096
 
-  msg2 "Building optimized browser..."
+  echo "Building optimized browser..."
   cat >.mozconfig ../mozconfig - <<END
 # ac_add_options --enable-lto=cross
 # ac_add_options --enable-profile-use=cross
@@ -148,7 +156,7 @@ build() {
 END
   ./mach build
 
-  msg2 "Building symbol archive..."
+  echo "Building symbol archive..."
   ./mach buildsymbols
 }
 
