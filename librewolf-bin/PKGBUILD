@@ -38,4 +38,3 @@ package() {
   # Will hopefully be improved once the main librewolf-ci works properly.
   cp -r $srcdir/usr $pkgdir/
 }
-sha256sums=('b19984711db368a6893d9afa09c6fe5a0b9186e5e7e950bd70e0a65017a68f3b')
