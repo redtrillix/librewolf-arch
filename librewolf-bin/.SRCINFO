@@ -27,7 +27,7 @@ pkgbase = librewolf-bin
 	provides = librewolf
 	conflicts = librewolf
 	options = !emptydirs
-	source = https://gitlab.com/librewolf-community/browser/arch/uploads/d676c03a2f42c51f816b05830f9bb716/librewolf-73.0-1-x86_64.pkg.tar.xz
+	source = https://gitlab.com/librewolf-community/browser/arch/uploads/8a4baa82b402eff025493fecf7a5851f/librewolf-73.0-1-x86_64.pkg.tar.xz
 	sha256sums = dfcd8ee286b1812b096f81e7e158bbdb82c2a6fbf0775bd345d59bae3ad62338
 
 pkgname = librewolf-bin
