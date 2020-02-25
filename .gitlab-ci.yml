@@ -32,6 +32,7 @@ before_script:
 
 build_repo:
   script:
+    - cd 'ci/librewolf'
     - sudo -u nobody -E -H makepkg --noconfirm --nosign --syncdeps --cleanbuild --skippgpcheck
 
   artifacts:
@@ -39,7 +40,7 @@ build_repo:
     # artifacts of interest for an unlimited time
     expire_in: 1 year
     paths:
-      - "*.pkg.tar."
+      - "**/*.pkg.tar."
   tags: [aarch64]
   only:
     - tags
