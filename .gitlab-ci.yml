@@ -41,6 +41,6 @@ build_repo:
     expire_in: 1 year
     paths:
       - "**/*.pkg.tar."
-  tags: [aarch64]
+  tags: [aarch64b]
   only:
     - tags
