@@ -5,7 +5,7 @@
 
 pkgname=librewolf
 _pkgname=LibreWolf
-pkgver=73.0
+pkgver=73.0.1
 pkgrel=1
 pkgdesc="Community-maintained fork of Librefox: a privacy and security-focused browser"
 arch=(x86_64)
@@ -28,7 +28,7 @@ source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-
         $pkgname.cfg.patch
         "git+https://gitlab.com/${pkgname}-community/browser/common.git"
         "git+https://gitlab.com/${pkgname}-community/settings.git")
-sha256sums=('b57af802aae32d7f4624ce8b373701236b76904abcb893ded9e0cb5805ba6e17'
+sha256sums=('53415180e74da60fc91700ce1ff33bf5b6f51e65353017a98270899a08e0c3d2'
             '0471d32366c6f415f7608b438ddeb10e2f998498c389217cdd6cc52e8249996b'
             'e03332f0e865949df5af9c231a364e9e1068fca0439621b98c2d4160d93e674f'
             'SKIP'
@@ -144,7 +144,7 @@ END
   ./mach package
   LLVM_PROFDATA=llvm-profdata \
     JARLOG_FILE="$PWD/jarlog" \
-    xvfb-run -a -n 92 -s "-screen 0 1600x1200x24" \
+    xvfb-run -s "-screen 0 1920x1080x24 -nolisten local" \
     ./mach python build/pgo/profileserver.py
 
   if [[ ! -s merged.profdata ]]; then
@@ -190,9 +190,8 @@ pref("spellchecker.dictionary_path", "/usr/share/hunspell");
 // Disable default browser checking.
 pref("browser.shell.checkDefaultBrowser", false);
 
-// Don't disable our bundled extensions in the application directory
+// Don't disable extensions in the application directory
 pref("extensions.autoDisableScopes", 11);
-pref("extensions.shownSelectionUI", true);
 END
 
   cp -r ${srcdir}/settings/* ${pkgdir}/usr/lib/${pkgname}/
