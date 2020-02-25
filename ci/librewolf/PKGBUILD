@@ -111,7 +111,7 @@ mk_add_options MOZ_TELEMETRY_REPORTING=0
 END
 
 if [[ $CARCH == 'aarch64' ]]; then
-cat >../mozconfig <<END
+cat >>../mozconfig <<END
 # taken from manjaro build:
 ac_add_options --enable-lto
 ac_add_options --enable-optimize="-g0 -O2"
