@@ -60,7 +60,7 @@ prepare() {
   patch -Np1 -i ${srcdir}/${pkgname}.cfg.patch
   cd ${srcdir}/firefox-$pkgver
 
-cat >../mozconfig <<END
+  cat >../mozconfig <<END
 ac_add_options --enable-application=browser
 
 # This supposedly speeds up compilation (We test through dogfooding anyway)
@@ -123,8 +123,9 @@ export RUSTFLAGS="-Cdebuginfo=0"
 # from ALARM
 ac_add_options --disable-webrtc
 
-ac_add_options --enable-optimize
 END
+
+# ac_add_options --enable-optimize  <- ?
 
   LDFLAGS+=" -Wl,--no-keep-memory -Wl,--reduce-memory-overheads"
   patch -p1 -i ../arm.patch

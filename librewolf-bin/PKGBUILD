@@ -22,7 +22,7 @@ install=librewolf-bin.install
 
 case "$CARCH" in
         aarch64) _uploadh='450964267'
-                _uploadpath="https://gitlab.com/${pkgname//-bin/""}-community/browser/arch/-/jobs/${_uploadh}/artifacts/raw/${pkgname//-bin/""}-${pkgver}-${pkgrel}-${CARCH}.pkg.tar.zst"
+                _uploadpath="https://gitlab.com/${pkgname//-bin/""}-community/browser/arch/-/jobs/${_uploadh}/artifacts/raw/ci/${pkgname//-bin/""}/${pkgname//-bin/""}-${pkgver}-${pkgrel}-${CARCH}.pkg.tar.zst"
                 sha256sums+=('dc933479b0ddd4b26695ddd851e168d3e5a6f57789989070961337c66f17e7f3')
                 ;;
         x86_64) _uploadh='8f0174726c60c895d643ec7533a41858'
