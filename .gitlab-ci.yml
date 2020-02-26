@@ -40,7 +40,7 @@ build_repo:
     # artifacts of interest for an unlimited time
     expire_in: 1 year
     paths:
-      - "**/*.pkg.tar."
+      - "**/*.pkg.tar.*"
   tags: [aarch64b]
   only:
     - tags
