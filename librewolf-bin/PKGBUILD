@@ -21,7 +21,7 @@ options=(!emptydirs)
 
 case "$CARCH" in
         aarch64) _uploadh='e3340f094cc91a362a5cbf56dfc389ab'
-                _uploadpath="https://gitlab.com/${pkgname//-bin/""}-community/browser/linux/-/jobs/${_uploadh}/${pkgname//-bin/""}-${pkgver}-${pkgrel}-${CARCH}.pkg.tar.zst"
+                _uploadpath="https://gitlab.com/${pkgname//-bin/""}-community/browser/linux/uploads/${_uploadh}/${pkgname//-bin/""}-${pkgver}-${pkgrel}-${CARCH}.pkg.tar.zst"
                 sha256sums+=('99086170e87484561e2f86580ffd32d74d1e0a9c0a6f1fd8175e050f5500aa09')
                 ;;
         x86_64) _uploadh='73883ebba1a1493bfe2c445fbd3267fe'
