@@ -5,7 +5,7 @@ provides=(${pkgname//-bin/""})
 conflicts=(${pkgname//-bin/""})
 _pkgname=LibreWolf
 pkgver=74.0
-pkgrel=4
+pkgrel=5
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
 license=(MPL GPL LGPL)
@@ -20,13 +20,13 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 options=(!emptydirs)
 
 case "$CARCH" in
-        aarch64) _uploadh='492798386'
+        aarch64) _uploadh='494547396'
                 _uploadpath="https://gitlab.com/${pkgname//-bin/""}-community/browser/linux/-/jobs/${_uploadh}/artifacts/raw/${pkgname//-bin/""}-${pkgver}-${pkgrel}-${CARCH}.pkg.tar.zst"
-                sha256sums+=('47c8039beb01d6fa25a5a976ecea69dea79c63b4ccf8d1322fcf12646d118246')
+                sha256sums+=('b1fcdb207961a6aece4f88b6288cd5bb10d6be81e28d477b47cb4bb846703c89')
                 ;;
-        x86_64) _uploadh='492367575'
-                sha256sums+=('9498b8103bc11b4926c45f3ebed12f2ef8ac38c68520eb38a4beb5848d06ec74')
+        x86_64) _uploadh='494547075'
                 _uploadpath="https://gitlab.com/${pkgname//-bin/""}-community/browser/linux/-/jobs/${_uploadh}/artifacts/raw/${pkgname//-bin/""}-${pkgver}-${pkgrel}-${CARCH}.pkg.tar.xz"
+                sha256sums+=('f844dc54f2a508b8b4f7e10059e2a9cc3bfb1388d913d7a28dc343f75b07c64e')
                 ;;
 esac
 
