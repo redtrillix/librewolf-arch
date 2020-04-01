@@ -26,7 +26,7 @@ case "$CARCH" in
                 ;;
         x86_64) _uploadh='494547075'
                 _uploadpath="https://gitlab.com/${pkgname//-bin/""}-community/browser/linux/-/jobs/${_uploadh}/artifacts/raw/${pkgname//-bin/""}-${pkgver}-${pkgrel}-${CARCH}.pkg.tar.xz"
-                sha256sums+=('f844dc54f2a508b8b4f7e10059e2a9cc3bfb1388d913d7a28dc343f75b07c64e')
+                sha256sums+=('8d2a55367732c51ca1ecc1a0ab7a3eec6ba96b78fa99a06d921e7240ac76b219')
                 ;;
 esac
 
