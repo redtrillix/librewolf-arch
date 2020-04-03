@@ -24,7 +24,7 @@ case "$CARCH" in
                 _uploadpath="https://gitlab.com/${pkgname//-bin/""}-community/browser/linux/-/jobs/${_uploadh}/artifacts/raw/${pkgname//-bin/""}-${pkgver}-${pkgrel}-${CARCH}.pkg.tar.zst"
                 sha256sums+=('b1fcdb207961a6aece4f88b6288cd5bb10d6be81e28d477b47cb4bb846703c89')
                 ;;
-        x86_64) _uploadh='494547075'
+        x86_64) _uploadh='494561232'
                 _uploadpath="https://gitlab.com/${pkgname//-bin/""}-community/browser/linux/-/jobs/${_uploadh}/artifacts/raw/${pkgname//-bin/""}-${pkgver}-${pkgrel}-${CARCH}.pkg.tar.xz"
                 sha256sums+=('8d2a55367732c51ca1ecc1a0ab7a3eec6ba96b78fa99a06d921e7240ac76b219')
                 ;;

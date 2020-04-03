@@ -26,7 +26,7 @@ pkgbase = librewolf-bin
 	provides = librewolf
 	conflicts = librewolf
 	options = !emptydirs
-	source = https://gitlab.com/librewolf-community/browser/linux/-/jobs/494547075/artifacts/raw/librewolf-74.0-5-x86_64.pkg.tar.xz
+	source = https://gitlab.com/librewolf-community/browser/linux/-/jobs/494561232/artifacts/raw/librewolf-74.0-5-x86_64.pkg.tar.xz
 	sha256sums = 8d2a55367732c51ca1ecc1a0ab7a3eec6ba96b78fa99a06d921e7240ac76b219
 
 pkgname = librewolf-bin
