@@ -26,8 +26,8 @@ pkgbase = librewolf-bin
 	provides = librewolf
 	conflicts = librewolf
 	options = !emptydirs
-	source_x86_64 = https://gitlab.com/librewolf-community/browser/linux/uploads/f0c7c73bd4ca96ec4626f54a493dca49/librewolf-84.0-1-x86_64.pkg.tar.zst
-	sha256sums_x86_64 = 4031b4eeaaea2d8ac4dc9d8e7537eb6f0c96927f880deb2daa4be1f9bf0904c2
+	source_x86_64 = https://gitlab.com/librewolf-community/browser/linux/uploads/f5235e36c1824b77ad7ecfa6b648e077/librewolf-84.0-1-x86_64.pkg.tar.zst
+	sha256sums_x86_64 = 70de5aa572cf74a0cedf2e41a34d449e0ef69cd4d58c2860c1e3a2598a472e0f
 	source_aarch64 = https://gitlab.com/librewolf-community/browser/linux/uploads/a688e3fd15069565cef59fb1ccc0eb09/librewolf-84.0-1-aarch64.pkg.tar.zst
 	sha256sums_aarch64 = d79276c124e2aa71e4cf5df321858db02ab46db77e4cb2bbf2702319e9fc598c
 
