@@ -34,7 +34,7 @@ arch_x86_64:
   <<: *arch_build_config
   only:
     variables:
-      - $ARCH && $X86_64
+      - $X86_64
 
 arch_aarch64:
   image: registry.gitlab.com/ohfp/manjaro-arm-docker
@@ -43,4 +43,4 @@ arch_aarch64:
   <<: *arch_build_config
   only:
     variables:
-      - $ARCH && $AARCH64
+      - $AARCH64
