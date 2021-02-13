@@ -1,0 +1,6 @@
+**/*.source.tar.xz
+**/*.pkg.tar.*
+*.patch
+common
+settings
+src
