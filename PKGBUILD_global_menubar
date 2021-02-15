@@ -128,7 +128,8 @@ END
   export RUSTFLAGS="-Cdebuginfo=0"
 
   # we should have more than enough RAM on the CI spot instances.
-  # export LDFLAGS+=" -Wl,--no-keep-memory"
+  # ...or maybe not?
+  export LDFLAGS+=" -Wl,--no-keep-memory"
   patch -p1 -i ../arm.patch
   patch -p1 -i ../build-arm-libopus.patch
 
