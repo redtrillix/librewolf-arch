@@ -6,7 +6,7 @@
 pkgname=librewolf
 _pkgname=LibreWolf
 pkgver=85.0.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
 license=(MPL GPL LGPL)
@@ -23,24 +23,26 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'hunspell-en_US: Spell checking, American English')
 options=(!emptydirs !makeflags !strip)
 _arch_svn=https://git.archlinux.org/svntogit/packages.git/plain/trunk
-_linux_commit=14bf1d12dd6d6f3ee04213ae8b4b1fd0f50e14fc
+_linux_commit=f43e70c98c07d8cf5a3325733ff5084b6f672564
 _settings_commit=3feb12464aa81df2f4ff162fce69890614c0ac8f
 source_x86_64=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
                $pkgname.desktop
                "git+https://gitlab.com/${pkgname}-community/browser/common.git"
                "git+https://gitlab.com/${pkgname}-community/settings.git#commit=${_settings_commit}"
-               "rust_build_fix.patch"
+               "rust_build_fix.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/rust_build_fix.patch"
                "megabar.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/megabar.patch"
                "remove_addons.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/remove_addons.patch"
+               "context-menu.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/context-menu.patch"
                "unity-menubar.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/unity-menubar.patch")
 source_aarch64=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
                 $pkgname.desktop
                 "git+https://gitlab.com/${pkgname}-community/browser/common.git"
                 "git+https://gitlab.com/${pkgname}-community/settings.git#commit=${_settings_commit}"
-                "rust_build_fix.patch"
+                "rust_build_fix.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/rust_build_fix.patch"
                 "megabar.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/megabar.patch"
                 "remove_addons.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/remove_addons.patch"
                 "unity-menubar.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/unity-menubar.patch"
+                "context-menu.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/context-menu.patch"
                 "arm.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/arm.patch"
                 https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch)
 
@@ -51,6 +53,7 @@ sha256sums_x86_64=('b157cdc265daa6140ec8daef2bc98d335f871e7e9ac235287fb199e11c16
                    '9a546803491818cfc016e4be908710e230b2b2b6640ec1a7df61c98053444471'
                    '682bf4bf5d79db0080aa132235a95b25745c8ef944d2a2e1fed985489d894df5'
                    'f2f7403c9abd33a7470a5861e247b488693cf8d7d55c506e7e579396b7bf11e6'
+                   '3bc57d97ef58c5e80f6099b0e82dab23a4404de04710529d8a8dd0eaa079afcd'
                    'ee302586f5291f809759f5eae3e5bad60b13007d9a9d37ac7f397597eb1d8665')
 sha256sums_aarch64=('b157cdc265daa6140ec8daef2bc98d335f871e7e9ac235287fb199e11c164287'
                     '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
@@ -60,6 +63,7 @@ sha256sums_aarch64=('b157cdc265daa6140ec8daef2bc98d335f871e7e9ac235287fb199e11c1
                     '682bf4bf5d79db0080aa132235a95b25745c8ef944d2a2e1fed985489d894df5'
                     'f2f7403c9abd33a7470a5861e247b488693cf8d7d55c506e7e579396b7bf11e6'
                     'ee302586f5291f809759f5eae3e5bad60b13007d9a9d37ac7f397597eb1d8665'
+                    '3bc57d97ef58c5e80f6099b0e82dab23a4404de04710529d8a8dd0eaa079afcd'
                     '6ca87d2ac7dc48e6f595ca49ac8151936afced30d268a831c6a064b52037f6b7'
                     '2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
 
@@ -149,8 +153,7 @@ fi
   patch -p1 -i ../megabar.patch
 
   # Debian patch to enable global menubar
-  # disabled until it's updated upstream
-  # also disabled for the default build, as it seems to cause issues in some configurations
+  # disabled for the default build, as it seems to cause issues in some configurations
   # patch -p1 -i ../unity-menubar.patch
 
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1684261
@@ -158,6 +161,9 @@ fi
 
   # Disabling Pocket
   sed -i "s/'pocket'/#'pocket'/g" browser/components/moz.build
+
+  patch -p1 -i ../context-menu.patch
+
   # this one only to remove an annoying error message:
   sed -i 's#SaveToPocket.init();#// SaveToPocket.init();#g' browser/components/BrowserGlue.jsm
 
