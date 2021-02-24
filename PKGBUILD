@@ -24,7 +24,7 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 options=(!emptydirs !makeflags !strip)
 _arch_svn=https://git.archlinux.org/svntogit/packages.git/plain/trunk
 _linux_commit=e123b80f7df1ad9043435f345c426717ca323579
-_settings_commit=3feb12464aa81df2f4ff162fce69890614c0ac8f
+_settings_commit=c5c75a39dd91a8772255a78493853be6553262b2
 source_x86_64=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
                $pkgname.desktop
                "git+https://gitlab.com/${pkgname}-community/browser/common.git"
