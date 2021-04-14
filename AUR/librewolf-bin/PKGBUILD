@@ -17,6 +17,8 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech'
             'hunspell-en_US: Spell checking, American English')
 validpgpkeys=('031F7104E932F7BD7416E7F6D2845E1305D6E801')
+backup=('usr/lib/librewolf/librewolf.cfg'
+        'usr/lib/librewolf/distribution/policies.json')
 options=(!emptydirs)
 
 _uploadh_aarch64='995d8cdffa3ee9b56e492e31dd6d268d'

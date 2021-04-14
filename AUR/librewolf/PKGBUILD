@@ -21,6 +21,8 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'pulseaudio: Audio support'
             'speech-dispatcher: Text-to-Speech'
             'hunspell-en_US: Spell checking, American English')
+backup=('usr/lib/librewolf/librewolf.cfg'
+        'usr/lib/librewolf/distribution/policies.json')
 options=(!emptydirs !makeflags !strip)
 _arch_svn=https://git.archlinux.org/svntogit/packages.git/plain/trunk
 _linux_commit=7a39d563510701275472b1656b92eed590a040d5
