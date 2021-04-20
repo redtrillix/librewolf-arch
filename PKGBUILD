@@ -27,7 +27,7 @@ options=(!emptydirs !makeflags !strip)
 _arch_svn=https://git.archlinux.org/svntogit/packages.git/plain/trunk
 _linux_commit=062a454cf3a13f04f303c5a1ac88c80f92e689d7
 _settings_commit=1b9cc88ccf64993951fe28cf426cf883e37e1b4d
-source_x86_64=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
+source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
                $pkgname.desktop
                "git+https://gitlab.com/${pkgname}-community/browser/common.git"
                "git+https://gitlab.com/${pkgname}-community/settings.git#commit=${_settings_commit}"
@@ -36,37 +36,18 @@ source_x86_64=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/f
                "context-menu.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/context-menu.patch"
                "unity-menubar.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/unity-menubar.patch"
                "mozilla-vpn-ad.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/mozilla-vpn-ad.patch")
-source_aarch64=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
-                $pkgname.desktop
-                "git+https://gitlab.com/${pkgname}-community/browser/common.git"
-                "git+https://gitlab.com/${pkgname}-community/settings.git#commit=${_settings_commit}"
-                "megabar.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/megabar.patch"
-                "remove_addons.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/remove_addons.patch"
-                "unity-menubar.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/unity-menubar.patch"
-                "context-menu.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/context-menu.patch"
-                "mozilla-vpn-ad.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/mozilla-vpn-ad.patch"
-                "arm.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/arm.patch"
+source_aarch64=("arm.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/arm.patch"
                 https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch)
-
-sha256sums_x86_64=('6b50dbfb393f843e4401e23965a1d8f7fd44b5a7628d95138294094094eee297'
-                   '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
-                   'SKIP'
-                   'SKIP'
-                   '4487f78173793b9fab2b5b26879d468d2ace2837fb938f74809d961e14da0a65'
-                   'af9d9341917cf3c5844fc46597ad2d842642c937c9be574bfacfe5c242b1114c'
-                   '3bc57d97ef58c5e80f6099b0e82dab23a4404de04710529d8a8dd0eaa079afcd'
-                   '85f037f794afee0c70840123960375a00f9cef08dd903ea038b6bb62e683b96f'
-                   'f3fd29e24207d5cc83f9df6c9ffa960aabdab598ea59a61fec57e9947b1d8bc9')
-sha256sums_aarch64=('6b50dbfb393f843e4401e23965a1d8f7fd44b5a7628d95138294094094eee297'
-                    '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
-                    'SKIP'
-                    'SKIP'
-                    '4487f78173793b9fab2b5b26879d468d2ace2837fb938f74809d961e14da0a65'
-                    'af9d9341917cf3c5844fc46597ad2d842642c937c9be574bfacfe5c242b1114c'
-                    '85f037f794afee0c70840123960375a00f9cef08dd903ea038b6bb62e683b96f'
-                    '3bc57d97ef58c5e80f6099b0e82dab23a4404de04710529d8a8dd0eaa079afcd'
-                    'f3fd29e24207d5cc83f9df6c9ffa960aabdab598ea59a61fec57e9947b1d8bc9'
-                    '6ca87d2ac7dc48e6f595ca49ac8151936afced30d268a831c6a064b52037f6b7'
+sha256sums=('6b50dbfb393f843e4401e23965a1d8f7fd44b5a7628d95138294094094eee297'
+            '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
+            'SKIP'
+            'SKIP'
+            '4487f78173793b9fab2b5b26879d468d2ace2837fb938f74809d961e14da0a65'
+            'af9d9341917cf3c5844fc46597ad2d842642c937c9be574bfacfe5c242b1114c'
+            '3bc57d97ef58c5e80f6099b0e82dab23a4404de04710529d8a8dd0eaa079afcd'
+            '85f037f794afee0c70840123960375a00f9cef08dd903ea038b6bb62e683b96f'
+            'f3fd29e24207d5cc83f9df6c9ffa960aabdab598ea59a61fec57e9947b1d8bc9')
+sha256sums_aarch64=('6ca87d2ac7dc48e6f595ca49ac8151936afced30d268a831c6a064b52037f6b7'
                     '2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
 
 prepare() {
