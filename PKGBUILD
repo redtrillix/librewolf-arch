@@ -25,7 +25,7 @@ backup=('usr/lib/librewolf/librewolf.cfg'
         'usr/lib/librewolf/distribution/policies.json')
 options=(!emptydirs !makeflags !strip)
 _arch_svn=https://git.archlinux.org/svntogit/packages.git/plain/trunk
-_linux_commit=062a454cf3a13f04f303c5a1ac88c80f92e689d7
+_linux_commit=9e90fb3a9bc38aad9921530ee69ecabf6ac8c7bf
 _settings_commit=1b9cc88ccf64993951fe28cf426cf883e37e1b4d
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
                $pkgname.desktop
@@ -45,7 +45,7 @@ sha256sums=('6b50dbfb393f843e4401e23965a1d8f7fd44b5a7628d95138294094094eee297'
             '4487f78173793b9fab2b5b26879d468d2ace2837fb938f74809d961e14da0a65'
             'af9d9341917cf3c5844fc46597ad2d842642c937c9be574bfacfe5c242b1114c'
             '3bc57d97ef58c5e80f6099b0e82dab23a4404de04710529d8a8dd0eaa079afcd'
-            '85f037f794afee0c70840123960375a00f9cef08dd903ea038b6bb62e683b96f'
+            '860e49ab14ce2c9416a479d313a2da799e023db58e93b81ca4cb869c5afb39a7'
             'f3fd29e24207d5cc83f9df6c9ffa960aabdab598ea59a61fec57e9947b1d8bc9')
 sha256sums_aarch64=('6ca87d2ac7dc48e6f595ca49ac8151936afced30d268a831c6a064b52037f6b7'
                     '2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
