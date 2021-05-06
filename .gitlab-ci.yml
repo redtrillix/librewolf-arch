@@ -28,7 +28,7 @@ variables:
       - "librewolf-${pkgver}-${pkgrel}-${CARCH}*.pkg.tar*"
 
 arch_x86_64:
-  image: archlinux/base
+  image: archlinux/archlinux:base-devel
   tags: [x86_64b]
   <<: *carch_x86_64
   <<: *arch_build_config
