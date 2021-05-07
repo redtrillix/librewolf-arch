@@ -32,13 +32,13 @@ source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-
                $pkgname.desktop
                "git+https://gitlab.com/${pkgname}-community/browser/common.git"
                "git+https://gitlab.com/${pkgname}-community/settings.git#commit=${_settings_commit}"
-               "megabar.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/megabar.patch"
-               "remove_addons.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/remove_addons.patch"
-               "context-menu.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/context-menu.patch"
-               "unity-menubar.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/unity-menubar.patch"
-               "mozilla-vpn-ad.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/mozilla-vpn-ad.patch")
-source_aarch64=("arm.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/arm.patch"
-                https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch)
+               "${pkgver}-${pkgrel}_megabar.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/megabar.patch"
+               "${pkgver}-${pkgrel}_remove_addons.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/remove_addons.patch"
+               "${pkgver}-${pkgrel}_context-menu.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/context-menu.patch"
+               "${pkgver}-${pkgrel}_unity-menubar.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/unity-menubar.patch"
+               "${pkgver}-${pkgrel}_mozilla-vpn-ad.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/mozilla-vpn-ad.patch")
+source_aarch64=("${pkgver}-${pkgrel}_arm.patch::https://gitlab.com/librewolf-community/browser/linux/-/raw/${_linux_commit}/arm.patch"
+                "${pkgver}-${pkgrel}_build-arm-libopus.patch::https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch")
 sha256sums=('83df1eae0e28fe99661fd5d39d705cdab2e108b4a24ce12c2db6183c632804cc'
             '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
             'SKIP'
@@ -115,8 +115,8 @@ END
   # we should have more than enough RAM on the CI spot instances.
   # ...or maybe not?
   export LDFLAGS+=" -Wl,--no-keep-memory"
-  patch -p1 -i ../arm.patch
-  patch -p1 -i ../build-arm-libopus.patch
+  patch -p1 -i ../${pkgver}-${pkgrel}_arm.patch
+  patch -p1 -i ../${pkgver}-${pkgrel}_build-arm-libopus.patch
 
 else
 
@@ -127,11 +127,11 @@ END
 fi
 
   # Remove some pre-installed addons that might be questionable
-  patch -p1 -i ../remove_addons.patch
+  patch -p1 -i ../${pkgver}-${pkgrel}_remove_addons.patch
 
   # Disable (some) megabar functionality
   # Adapted from https://github.com/WesleyBranton/userChrome.css-Customizations
-  patch -p1 -i ../megabar.patch
+  patch -p1 -i ../${pkgver}-${pkgrel}_megabar.patch
 
   # Debian patch to enable global menubar
   # disabled for the default build, as it seems to cause issues in some configurations
@@ -140,10 +140,10 @@ fi
   # Disabling Pocket
   sed -i 's/"pocket"/# "pocket"/g' browser/components/moz.build
 
-  patch -p1 -i ../context-menu.patch
+  patch -p1 -i ../${pkgver}-${pkgrel}_context-menu.patch
 
   # remove mozilla vpn ads
-  patch -p1 -i ../mozilla-vpn-ad.patch
+  patch -p1 -i ../${pkgver}-${pkgrel}_mozilla-vpn-ad.patch
 
   # this one only to remove an annoying error message:
   sed -i 's#SaveToPocket.init();#// SaveToPocket.init();#g' browser/components/BrowserGlue.jsm
