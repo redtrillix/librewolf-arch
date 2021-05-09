@@ -13,9 +13,8 @@ license=(MPL GPL LGPL)
 url="https://librewolf-community.gitlab.io/"
 depends=(gtk3 libxt mime-types dbus-glib ffmpeg nss ttf-font libpulse)
 makedepends=(unzip zip diffutils yasm mesa imake inetutils xorg-server-xvfb
-             rust
-             autoconf2.13 clang llvm jack gtk2 nodejs cbindgen nasm
-             python-setuptools python-psutil python-zstandard git binutils lld)
+             autoconf2.13 rust clang llvm jack gtk2 nodejs cbindgen nasm
+             python-setuptools python-psutil python-zstandard git binutils lld dump_syms)
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'libnotify: Notification integration'
             'pulseaudio: Audio support'
@@ -80,6 +79,10 @@ ac_add_options --with-unsigned-addon-scopes=app,system
 ac_add_options --allow-addon-sideload
 export MOZ_REQUIRE_SIGNING=0
 
+# System libraries
+ac_add_options --with-system-nspr
+ac_add_options --with-system-nss
+
 # Features
 ac_add_options --enable-alsa
 ac_add_options --enable-jack
@@ -135,7 +138,7 @@ fi
 
   # Debian patch to enable global menubar
   # disabled for the default build, as it seems to cause issues in some configurations
-  # patch -p1 -i ../unity-menubar.patch
+  # patch -p1 -i ../${pkgver}-${pkgrel}_unity-menubar.patch
 
   # Disabling Pocket
   sed -i 's/"pocket"/# "pocket"/g' browser/components/moz.build
@@ -212,15 +215,11 @@ fi
     xvfb-run -s "-screen 0 1920x1080x24 -nolisten local" \
     ./mach python build/pgo/profileserver.py
 
-  if [[ ! -s merged.profdata ]]; then
-    echo "No profile data produced."
-    return 1
-  fi
+  stat -c "Profile data found (%s bytes)" merged.profdata
+  test -s merged.profdata
 
-  if [[ ! -s jarlog ]]; then
-    echo "No jar log produced."
-    return 1
-  fi
+  stat -c "Jar log found (%s bytes)" jarlog
+  test -s jarlog
 
   echo "Removing instrumented browser..."
   ./mach clobber
