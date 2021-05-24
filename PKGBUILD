@@ -32,7 +32,11 @@ source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-
                "git+https://gitlab.com/${pkgname}-community/browser/common.git#commit=${_common_commit}"
                "git+https://gitlab.com/${pkgname}-community/settings.git#commit=${_settings_commit}")
 source_aarch64=("${pkgver}-${pkgrel}_build-arm-libopus.patch::https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch")
-
+sha256sums=('83df1eae0e28fe99661fd5d39d705cdab2e108b4a24ce12c2db6183c632804cc'
+            '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
+            'SKIP'
+            'SKIP')
+sha256sums_aarch64=('2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
 
 prepare() {
   mkdir -p mozbuild
@@ -294,8 +298,3 @@ END
     ln -srfv "$pkgdir/usr/lib/libnssckbi.so" "$nssckbi"
   fi
 }
-md5sums=('6352fb2283f0a718d04486b5ba0808e9'
-         'a85c7f72bd881d9d44bbbdb4ed95e4e4'
-         'SKIP'
-         'SKIP')
-md5sums_aarch64=('7ef0984e9cd424a8239de164fed7ce54')
