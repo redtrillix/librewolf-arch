@@ -5,8 +5,8 @@
 
 pkgname=librewolf
 _pkgname=LibreWolf
-pkgver=88.0.1
-pkgrel=2
+pkgver=89.0
+pkgrel=1
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
 license=(MPL GPL LGPL)
@@ -19,7 +19,8 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'libnotify: Notification integration'
             'pulseaudio: Audio support'
             'speech-dispatcher: Text-to-Speech'
-            'hunspell-en_US: Spell checking, American English')
+            'hunspell-en_US: Spell checking, American English'
+            'xdg-desktop-portal: Screensharing with Wayland')
 backup=('usr/lib/librewolf/librewolf.cfg'
         'usr/lib/librewolf/distribution/policies.json')
 options=(!emptydirs !makeflags !strip)
@@ -28,12 +29,14 @@ _common_commit=5bce5285fa7046e6987ec3e5a8931ac17ca6c7c0
 _settings_commit=c78c50fbefe2fcf830611e21dcc0fe79180d1e01
 install='librewolf.install'
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
-               $pkgname.desktop
-               "git+https://gitlab.com/${pkgname}-community/browser/common.git#commit=${_common_commit}"
-               "git+https://gitlab.com/${pkgname}-community/settings.git#commit=${_settings_commit}")
+        $pkgname.desktop
+        https://gitlab.com/-/snippets/2129234/raw/main/megabar2.patch
+        "git+https://gitlab.com/${pkgname}-community/browser/common.git#commit=${_common_commit}"
+        "git+https://gitlab.com/${pkgname}-community/settings.git#commit=${_settings_commit}")
 source_aarch64=("${pkgver}-${pkgrel}_build-arm-libopus.patch::https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch")
-sha256sums=('83df1eae0e28fe99661fd5d39d705cdab2e108b4a24ce12c2db6183c632804cc'
+sha256sums=('db43d7d5796455051a5b847f6daa3423393803c9288c8b6d7f1186f5e2e0a90a'
             '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
+            '2c171c253ee186cbf44969154ef2ebf5d7093d379187844a2c4529c8ecb0d8e0'
             'SKIP'
             'SKIP')
 sha256sums_aarch64=('2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
@@ -124,7 +127,9 @@ fi
 
   # Disable (some) megabar functionality
   # Adapted from https://github.com/WesleyBranton/userChrome.css-Customizations
-  patch -Np1 -i ${_patches_dir}/megabar.patch
+  # patch -Np1 -i ${_patches_dir}/megabar.patch
+  # experimental patch
+  patch -Np1 -i ${srcdir}/megabar2.patch
 
   # Debian patch to enable global menubar
   # disabled for the default build, as it seems to cause issues in some configurations
