@@ -31,12 +31,14 @@ install='librewolf.install'
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
         $pkgname.desktop
         https://gitlab.com/-/snippets/2129234/raw/main/megabar2.patch
+        mozilla-vpn-ad.patch
         "git+https://gitlab.com/${pkgname}-community/browser/common.git#commit=${_common_commit}"
         "git+https://gitlab.com/${pkgname}-community/settings.git#commit=${_settings_commit}")
 source_aarch64=("${pkgver}-${pkgrel}_build-arm-libopus.patch::https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch")
 sha256sums=('db43d7d5796455051a5b847f6daa3423393803c9288c8b6d7f1186f5e2e0a90a'
             '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
             '2c171c253ee186cbf44969154ef2ebf5d7093d379187844a2c4529c8ecb0d8e0'
+            'c5504c770315ad1e91a45479950a31b0cefc4b194c0b899d27d54c79c5fcde58'
             'SKIP'
             'SKIP')
 sha256sums_aarch64=('2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
@@ -139,7 +141,8 @@ fi
   patch -Np1 -i ${_patches_dir}/sed-patches/disable-pocket.patch
 
   # remove mozilla vpn ads
-  patch -Np1 -i ${_patches_dir}/mozilla-vpn-ad.patch
+  # patch -Np1 -i ${_patches_dir}/mozilla-vpn-ad.patch
+  patch -Np1 -i ${srcdir}/mozilla-vpn-ad.patch
 
   # Remove Internal Plugin Certificates
   patch -Np1 -i ${_patches_dir}/sed-patches/remove-internal-plugin-certs.patch
