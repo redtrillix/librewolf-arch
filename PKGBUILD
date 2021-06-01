@@ -33,6 +33,7 @@ source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-
         https://gitlab.com/-/snippets/2129234/raw/main/megabar2.patch
         mozilla-vpn-ad.patch
         context-menu2.patch
+        search-config.patch
         "git+https://gitlab.com/${pkgname}-community/browser/common.git#commit=${_common_commit}"
         "git+https://gitlab.com/${pkgname}-community/settings.git#commit=${_settings_commit}")
 source_aarch64=("${pkgver}-${pkgrel}_build-arm-libopus.patch::https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch")
@@ -41,6 +42,7 @@ sha256sums=('db43d7d5796455051a5b847f6daa3423393803c9288c8b6d7f1186f5e2e0a90a'
             '2c171c253ee186cbf44969154ef2ebf5d7093d379187844a2c4529c8ecb0d8e0'
             'c5504c770315ad1e91a45479950a31b0cefc4b194c0b899d27d54c79c5fcde58'
             '42c77a80ccd6d18600decfdaaa09cd32d6aa3a400f96c8686c2bfdec723f61c5'
+            '1696f5030e9ea6d40b17299ad4c4da5870c0eb6970466e104fe53fe910a4aaa6'
             'SKIP'
             'SKIP')
 sha256sums_aarch64=('2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
@@ -151,6 +153,9 @@ fi
 
   # allow SearchEngines option in non-ESR builds
   patch -Np1 -i ${_patches_dir}/sed-patches/allow-searchengines-non-esr.patch
+
+  # remove search extensions (experimental)
+  patch -Np1 -i ${srcdir}/search-config.patch
 
   # stop some undesired requests (https://gitlab.com/librewolf-community/browser/common/-/issues/10)
   patch -Np1 -i ${_patches_dir}/sed-patches/stop-undesired-requests.patch
