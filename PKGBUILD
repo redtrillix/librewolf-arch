@@ -125,9 +125,7 @@ fi
 
   # Disable (some) megabar functionality
   # Adapted from https://github.com/WesleyBranton/userChrome.css-Customizations
-  # patch -Np1 -i ${_patches_dir}/megabar.patch
-  # experimental patch
-  patch -Np1 -i ${srcdir}/megabar2.patch
+  patch -Np1 -i ${_patches_dir}/megabar.patch
 
   # Debian patch to enable global menubar
   # disabled for the default build, as it seems to cause issues in some configurations
@@ -137,8 +135,7 @@ fi
   patch -Np1 -i ${_patches_dir}/sed-patches/disable-pocket.patch
 
   # remove mozilla vpn ads
-  # patch -Np1 -i ${_patches_dir}/mozilla-vpn-ad.patch
-  patch -Np1 -i ${srcdir}/mozilla-vpn-ad.patch
+  patch -Np1 -i ${_patches_dir}/mozilla-vpn-ad.patch
 
   # Remove Internal Plugin Certificates
   patch -Np1 -i ${_patches_dir}/sed-patches/remove-internal-plugin-certs.patch
@@ -147,14 +144,14 @@ fi
   patch -Np1 -i ${_patches_dir}/sed-patches/allow-searchengines-non-esr.patch
 
   # remove search extensions (experimental)
-  patch -Np1 -i ${srcdir}/search-config.patch
+  patch -Np1 -i ${_patches_dir}/search-config.patch
 
   # stop some undesired requests (https://gitlab.com/librewolf-community/browser/common/-/issues/10)
   patch -Np1 -i ${_patches_dir}/sed-patches/stop-undesired-requests.patch
 
   # Assorted patches
   # patch -Np1 -i ${_patches_dir}/context-menu.patch
-  patch -Np1 -i ${srcdir}/context-menu2.patch
+  patch -Np1 -i ${_patches_dir}/context-menu.patch
   patch -Np1 -i ${_patches_dir}/browser-confvars.patch
   patch -Np1 -i ${_patches_dir}/urlbarprovider-interventions.patch
 
