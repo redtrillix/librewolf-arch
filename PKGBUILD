@@ -25,24 +25,16 @@ backup=('usr/lib/librewolf/librewolf.cfg'
         'usr/lib/librewolf/distribution/policies.json')
 options=(!emptydirs !makeflags !strip)
 _arch_svn=https://git.archlinux.org/svntogit/packages.git/plain/trunk
-_common_commit=5bce5285fa7046e6987ec3e5a8931ac17ca6c7c0
-_settings_commit=5cbb8b8b5401188f6e92f7880d33963ee0dcd8ca
+_common_tag="v${pkgver}-${pkgrel}"
+_settings_tag='1.0'
 install='librewolf.install'
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
         $pkgname.desktop
-        https://gitlab.com/-/snippets/2129234/raw/main/megabar2.patch
-        mozilla-vpn-ad.patch
-        context-menu2.patch
-        search-config.patch
-        "git+https://gitlab.com/${pkgname}-community/browser/common.git#commit=${_common_commit}"
-        "git+https://gitlab.com/${pkgname}-community/settings.git#commit=${_settings_commit}")
+        "git+https://gitlab.com/${pkgname}-community/browser/common.git#tag=${_common_tag}"
+        "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}")
 source_aarch64=("${pkgver}-${pkgrel}_build-arm-libopus.patch::https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch")
 sha256sums=('db43d7d5796455051a5b847f6daa3423393803c9288c8b6d7f1186f5e2e0a90a'
             '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
-            '2c171c253ee186cbf44969154ef2ebf5d7093d379187844a2c4529c8ecb0d8e0'
-            'c5504c770315ad1e91a45479950a31b0cefc4b194c0b899d27d54c79c5fcde58'
-            '42c77a80ccd6d18600decfdaaa09cd32d6aa3a400f96c8686c2bfdec723f61c5'
-            '1696f5030e9ea6d40b17299ad4c4da5870c0eb6970466e104fe53fe910a4aaa6'
             'SKIP'
             'SKIP')
 sha256sums_aarch64=('2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
