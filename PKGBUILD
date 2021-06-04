@@ -150,7 +150,6 @@ fi
   patch -Np1 -i ${_patches_dir}/sed-patches/stop-undesired-requests.patch
 
   # Assorted patches
-  # patch -Np1 -i ${_patches_dir}/context-menu.patch
   patch -Np1 -i ${_patches_dir}/context-menu.patch
   patch -Np1 -i ${_patches_dir}/browser-confvars.patch
   patch -Np1 -i ${_patches_dir}/urlbarprovider-interventions.patch
