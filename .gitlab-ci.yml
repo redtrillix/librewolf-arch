@@ -25,7 +25,7 @@ variables:
   artifacts:
     name: "Librewolf-Arch-${pkgver}-${pkgrel}-${CARCH}"
     paths:
-      - "librewolf-${pkgver}-${pkgrel}-${CARCH}*.pkg.tar*"
+      - "librewolf-${pkgver}-${pkgrel}-${CARCH}*pkg.tar*"
 
 arch_x86_64:
   image: archlinux/archlinux:base-devel
