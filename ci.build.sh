@@ -16,5 +16,5 @@ fi
 # makepkg will not run as root
 sudo -u nobody -E -H makepkg --noconfirm --nosign --syncdeps --cleanbuild -p "${PKGBUILD_NAME}"
 if [[ ! -z "${GLOBAL_MENUBAR}" ]];then
-  mv  "librewolf-${pkgver}-${pkgrel}-${CARCH}.pkg.tar*" "librewolf-${pkgver}-${pkgrel}-${CARCH}.global_menubar.pkg.tar*"
+  mv  "librewolf-${pkgver}-${pkgrel}-${CARCH}.pkg.tar.zst" "librewolf-${pkgver}-${pkgrel}-${CARCH}.global_menubar.pkg.tar.zst"
 fi
