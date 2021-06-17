@@ -154,6 +154,13 @@ fi
   patch -Np1 -i ${_patches_dir}/browser-confvars.patch
   patch -Np1 -i ${_patches_dir}/urlbarprovider-interventions.patch
 
+
+  # allow overriding the color scheme light/dark preference with RFP
+  patch -Np1 -i ${_patches_dir}/allow_dark_preference_with_rfp.patch
+
+  # fix an URL in 'about' dialog
+  patch -Np1 -i ${_patches_dir}/about-dialog.patch
+
   rm -f ${srcdir}/common/source_files/mozconfig
   cp -r ${srcdir}/common/source_files/* ./
 }
