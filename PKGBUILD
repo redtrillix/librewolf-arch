@@ -6,7 +6,7 @@
 pkgname=librewolf
 _pkgname=LibreWolf
 pkgver=89.0.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
 license=(MPL GPL LGPL)
@@ -31,11 +31,13 @@ install='librewolf.install'
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
         $pkgname.desktop
         "git+https://gitlab.com/${pkgname}-community/browser/common.git#tag=${_common_tag}"
+        "settings_pane.patch"
         "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}")
 source_aarch64=("${pkgver}-${pkgrel}_build-arm-libopus.patch::https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch")
 sha256sums=('3225f583c5e36bdf52ad16f71a2c359deb0c765c38205acdeb6b7b6520ac5494'
             '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
             'SKIP'
+            '09243edbb3891b04b0a305546bb763a023669522351e851d495fd913330cd2df'
             'SKIP')
 sha256sums_aarch64=('2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
 
@@ -160,6 +162,10 @@ fi
 
   # fix an URL in 'about' dialog
   patch -Np1 -i ${_patches_dir}/about-dialog.patch
+
+  # experimental new pref pane
+
+  patch -Np1 -i ${srcdir}/settings_pane.patch
 
   rm -f ${srcdir}/common/source_files/mozconfig
   cp -r ${srcdir}/common/source_files/* ./
