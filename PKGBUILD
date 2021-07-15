@@ -164,7 +164,7 @@ fi
   # change some hardcoded directory strings that could lead to unnecessarily
   # created directories
 
-  patch -Np1 -i ${_patches_dir}/mozilla_dirs.patch
+  # patch -Np1 -i ${_patches_dir}/mozilla_dirs.patch
 
   rm -f ${srcdir}/common/source_files/mozconfig
   cp -r ${srcdir}/common/source_files/* ./
