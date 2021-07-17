@@ -137,7 +137,8 @@ fi
   patch -Np1 -i ${_patches_dir}/mozilla-vpn-ad.patch
 
   # Remove Internal Plugin Certificates
-  patch -Np1 -i ${_patches_dir}/sed-patches/remove-internal-plugin-certs.patch
+  # patch -Np1 -i ${_patches_dir}/sed-patches/remove-internal-plugin-certs.patch
+  # => breaks profiled builds since 90.0, it seems
 
   # allow SearchEngines option in non-ESR builds
   patch -Np1 -i ${_patches_dir}/sed-patches/allow-searchengines-non-esr.patch
