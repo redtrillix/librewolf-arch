@@ -5,7 +5,7 @@
 
 pkgname=librewolf
 _pkgname=LibreWolf
-pkgver=90.0
+pkgver=90.0.1
 pkgrel=1
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
@@ -25,6 +25,7 @@ backup=('usr/lib/librewolf/librewolf.cfg'
         'usr/lib/librewolf/distribution/policies.json')
 options=(!emptydirs !makeflags !strip)
 _arch_svn=https://git.archlinux.org/svntogit/packages.git/plain/trunk
+_common_tag="v90.0-1"
 _common_tag="v${pkgver}-${pkgrel}"
 _settings_tag='1.3'
 install='librewolf.install'
@@ -33,7 +34,7 @@ source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-
         "git+https://gitlab.com/${pkgname}-community/browser/common.git#tag=${_common_tag}"
         "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}")
 source_aarch64=("${pkgver}-${pkgrel}_build-arm-libopus.patch::https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch")
-sha256sums=('43a943e7d7660c6d7f5b41c95b344b7fd6a4a88ad0bb45dbd844b372ea60d58b'
+sha256sums=('85796ca5857e2196c8722719423d3f164396efdefb2988d3efd6d5c399dc0a87'
             '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
             'SKIP'
             'SKIP')
