@@ -137,7 +137,7 @@ fi
   patch -Np1 -i ${_patches_dir}/mozilla-vpn-ad.patch
 
   # Remove Internal Plugin Certificates
-  # patch -Np1 -i ${_patches_dir}/sed-patches/remove-internal-plugin-certs.patch
+  patch -Np1 -i ${_patches_dir}/sed-patches/remove-internal-plugin-certs.patch
   # => breaks profiled builds since 90.0, it seems
 
   # allow SearchEngines option in non-ESR builds
@@ -164,7 +164,7 @@ fi
   # change some hardcoded directory strings that could lead to unnecessarily
   # created directories
 
-  # patch -Np1 -i ${_patches_dir}/mozilla_dirs.patch
+  patch -Np1 -i ${_patches_dir}/mozilla_dirs.patch
 
   rm -f ${srcdir}/common/source_files/mozconfig
   cp -r ${srcdir}/common/source_files/* ./
