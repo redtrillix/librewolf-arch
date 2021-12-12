@@ -5,8 +5,8 @@
 
 pkgname=librewolf
 _pkgname=LibreWolf
-pkgver=94.0.2
-pkgrel=2
+pkgver=95.0
+pkgrel=1
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
 license=(MPL GPL LGPL)
@@ -14,7 +14,8 @@ url="https://librewolf-community.gitlab.io/"
 depends=(gtk3 libxt mime-types dbus-glib ffmpeg nss ttf-font libpulse)
 makedepends=(unzip zip diffutils yasm mesa imake inetutils xorg-server-xvfb
              autoconf2.13 rust clang llvm jack nodejs cbindgen nasm
-             python-setuptools python-psutil python-zstandard git binutils lld dump_syms)
+             python-setuptools python-psutil python-zstandard git binutils lld dump_syms
+             wasi-compiler-rt wasi-libc wasi-libc++ wasi-libc++abi)
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'libnotify: Notification integration'
             'pulseaudio: Audio support'
@@ -26,19 +27,17 @@ backup=('usr/lib/librewolf/librewolf.cfg'
 options=(!emptydirs !makeflags !strip)
 _arch_git=https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/firefox/trunk
 _common_tag="v${pkgver}-${pkgrel}"
-_settings_tag='3.2'
+_settings_tag='4.0'
 install='librewolf.install'
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
         $pkgname.desktop
         "git+https://gitlab.com/${pkgname}-community/browser/common.git#tag=${_common_tag}"
-        "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}"
-        "0002-Bug-1735905-Upgrade-cubeb-pulse-to-fix-a-race-condit.patch::${_arch_git}/0002-Bug-1735905-Upgrade-cubeb-pulse-to-fix-a-race-condit.patch")
+        "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}")
 source_aarch64=("${pkgver}-${pkgrel}_build-arm-libopus.patch::https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch")
-sha256sums=('899ba1c806549034793d7e8ca53f4c845d783c810338f314f3d653d39649e575'
+sha256sums=('7fa3e43f6ec710b2ebba0e99db713a56d13d85f1f23c4a1399bb594fd74864de'
             '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
             'SKIP'
-            'SKIP'
-            '744d3956ba60c63fed81903700a4cf66c13d2898944e4e86ac0d3b1e3f222fff')
+            'SKIP')
 sha256sums_aarch64=('2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
 
 prepare() {
@@ -124,10 +123,6 @@ fi
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1530052
   # patch -Np1 -i ${srcdir}/0001-Use-remoting-name-for-GDK-application-names.patch
 
-  # https://bugzilla.opensuse.org/show_bug.cgi?id=1192067
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1735905
-  patch -Np1 -i ../0002-Bug-1735905-Upgrade-cubeb-pulse-to-fix-a-race-condit.patch
-
   # LibreWolf
 
   # Remove some pre-installed addons that might be questionable
@@ -167,7 +162,8 @@ fi
 
 
   # allow overriding the color scheme light/dark preference with RFP
-  patch -Np1 -i ${_patches_dir}/allow_dark_preference_with_rfp.patch
+  # deprecated, will probably be dropped soon
+  # patch -Np1 -i ${_patches_dir}/allow_dark_preference_with_rfp.patch
 
   # fix an URL in 'about' dialog
   patch -Np1 -i ${_patches_dir}/about-dialog.patch
@@ -281,6 +277,7 @@ ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
 ac_add_options --enable-linker=lld
 ac_add_options --disable-elf-hack
 ac_add_options --disable-bootstrap
+ac_add_options --with-wasi-sysroot=/usr/share/wasi-sysroot
 END
 
 fi
