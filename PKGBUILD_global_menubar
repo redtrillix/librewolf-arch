@@ -157,7 +157,8 @@ fi
   patch -Np1 -i ${_patches_dir}/sed-patches/allow-searchengines-non-esr.patch
 
   # remove search extensions (experimental)
-  patch -Np1 -i ${_patches_dir}/search-config.patch
+  # patch -Np1 -i ${_patches_dir}/search-config.patch
+  cp "${srcdir}/common/search-config.json" services/settings/dumps/main/search-config.json
 
   # stop some undesired requests (https://gitlab.com/librewolf-community/browser/common/-/issues/10)
   patch -Np1 -i ${_patches_dir}/sed-patches/stop-undesired-requests.patch
