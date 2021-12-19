@@ -159,7 +159,7 @@ fi
 
   # remove search extensions (experimental)
   # patch -Np1 -i ${_patches_dir}/search-config.patch
-  cp "${srcdir}/common/search-config.json" services/settings/dumps/main/search-config.json
+  cp "${srcdir}/common/source_files/search-config.json" services/settings/dumps/main/search-config.json
 
   # stop some undesired requests (https://gitlab.com/librewolf-community/browser/common/-/issues/10)
   patch -Np1 -i ${_patches_dir}/sed-patches/stop-undesired-requests.patch
@@ -210,7 +210,7 @@ fi
   patch -Np1 -i ${_patches_dir}/ui-patches/sanitizing-description.patch
 
   rm -f ${srcdir}/common/source_files/mozconfig
-  cp -r ${srcdir}/common/source_files/* ./
+  cp -r ${srcdir}/common/source_files/browser ./
 }
 
 
