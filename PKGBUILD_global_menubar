@@ -5,7 +5,7 @@
 
 pkgname=librewolf
 _pkgname=LibreWolf
-pkgver=95.0.1
+pkgver=95.0.2
 pkgrel=1
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
@@ -36,7 +36,7 @@ source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-
         ${_arch_git}/0002-Bug-1745560-Add-missing-stub-for-wl_proxy_marshal_fl.patch
         )
 source_aarch64=("${pkgver}-${pkgrel}_build-arm-libopus.patch::https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch")
-sha256sums=('552a2bd731921f40694a4db8ad31dce6f4e9f52035d04e7cd1f917613f803efa'
+sha256sums=('c178cbf61979bd39a8daa9a09c6e03089da37baded692ad1f745ecfcaae74d64'
             '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
             'SKIP'
             'SKIP'
