@@ -187,7 +187,7 @@ fi
   patch -Np1 -i ${_patches_dir}/ui-patches/pref-naming.patch
 
   #
-  patch -Np1 -i ${_patches_dir}/hide-safe-browsing.patch
+  patch -Np1 -i ${_patches_dir}/ui-patches/hide-safe-browsing.patch
 
   # remove firefox references in the urlbar, when suggesting opened tabs.
   patch -Np1 -i ${_patches_dir}/ui-patches/remove-branding-urlbar.patch
