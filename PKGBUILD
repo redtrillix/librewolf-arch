@@ -34,6 +34,7 @@ source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-
         "git+https://gitlab.com/${pkgname}-community/browser/common.git#tag=${_common_tag}"
         "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}"
         "pref_pane.patch"
+        "kde_menu.patch"
         "default192x192.png"
         )
 source_aarch64=("${pkgver}-${pkgrel}_build-arm-libopus.patch::https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch")
@@ -42,6 +43,7 @@ sha256sums=('cb86f3cbd31960305dee7d7f3dc254c64fb0462e27ea624ee62f3682e99079ee'
             'SKIP'
             'SKIP'
             '982fe27ebcf8326c47ef7ca30436051fc18fa3de93aea06e9821618d33695be6'
+            'aeb6f92857a2f7b53feb1b9640a440689a731a9e0c0a14d355a51ef9b0c3caa0'
             '959c94c68cab8d5a8cff185ddf4dca92e84c18dccc6dc7c8fe11c78549cdc2f1')
 sha256sums_aarch64=('2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
 
@@ -143,6 +145,9 @@ fi
   # Debian patch to enable global menubar
   # disabled for the default build, as it seems to cause issues in some configurations
   # patch -Np1 -i ${_patches_dir}/unity-menubar.patch
+
+  # KDE menu test
+  patch -Np1 -i ${srcdir}/kde_menu.patch
 
   # Disabling Pocket
   patch -Np1 -i ${_patches_dir}/sed-patches/disable-pocket.patch
