@@ -5,7 +5,7 @@
 
 pkgname=librewolf
 _pkgname=LibreWolf
-pkgver=96.0.1
+pkgver=96.0.2
 pkgrel=1
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
@@ -27,23 +27,21 @@ backup=('usr/lib/librewolf/librewolf.cfg'
 options=(!emptydirs !makeflags !strip !lto)
 _arch_git=https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/firefox/trunk
 _common_tag="v${pkgver}-${pkgrel}"
-_settings_tag='5.1'
+_settings_tag='5.2'
 install='librewolf.install'
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
         $pkgname.desktop
         "git+https://gitlab.com/${pkgname}-community/browser/common.git#tag=${_common_tag}"
         "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}"
-        "pref_pane.patch"
-        "kde_menu.patch"
+        "mozilla-kde_after_unity.patch"
         "default192x192.png"
         )
 source_aarch64=("${pkgver}-${pkgrel}_build-arm-libopus.patch::https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch")
-sha256sums=('cb86f3cbd31960305dee7d7f3dc254c64fb0462e27ea624ee62f3682e99079ee'
+sha256sums=('d32d2afa9179a78e6ed97e15e0f39e372c0d662cb9614404db15e7616da31ab8'
             '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
             'SKIP'
             'SKIP'
-            '982fe27ebcf8326c47ef7ca30436051fc18fa3de93aea06e9821618d33695be6'
-            'aeb6f92857a2f7b53feb1b9640a440689a731a9e0c0a14d355a51ef9b0c3caa0'
+            'cecdda87dd4815db4f104bd721c42d51ad382d4936cf9af962f325db820664bb'
             '959c94c68cab8d5a8cff185ddf4dca92e84c18dccc6dc7c8fe11c78549cdc2f1')
 sha256sums_aarch64=('2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
 
@@ -140,14 +138,16 @@ fi
 
   # Disable (some) megabar functionality
   # Adapted from https://github.com/WesleyBranton/userChrome.css-Customizations
-  patch -Np1 -i ${_patches_dir}/deprecated/megabar.patch
+  patch -Np1 -i ${_patches_dir}/removed-patches/megabar.patch
 
   # Debian patch to enable global menubar
   # disabled for the default build, as it seems to cause issues in some configurations
-  # patch -Np1 -i ${_patches_dir}/unity-menubar.patch
+  # 2022-01-21: re-enabled because it seems to not mess things up anymore nowadays?
+  patch -Np1 -i ${_patches_dir}/unity-menubar.patch
 
-  # KDE menu test
-  patch -Np1 -i ${srcdir}/kde_menu.patch
+  # KDE menu
+  # patch -Np1 -i ${_patches_dir}/mozilla-kde.patch
+  patch -Np1 -i ${srcdir}/mozilla-kde_after_unity.patch
 
   # Disabling Pocket
   patch -Np1 -i ${_patches_dir}/sed-patches/disable-pocket.patch
@@ -210,7 +210,7 @@ fi
   patch -Np1 -i ${_patches_dir}/ui-patches/sanitizing-description.patch
 
   # pref pane
-  patch -Np1 -i ${srcdir}/pref_pane.patch
+  patch -Np1 -i ${_patches_dir}/librewolf-pref-pane.patch
 
   rm -f ${srcdir}/common/source_files/mozconfig
   cp -r ${srcdir}/common/source_files/browser ./
