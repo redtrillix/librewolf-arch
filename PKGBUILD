@@ -41,7 +41,7 @@ sha256sums=('d32d2afa9179a78e6ed97e15e0f39e372c0d662cb9614404db15e7616da31ab8'
             '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
             'SKIP'
             'SKIP'
-            'cecdda87dd4815db4f104bd721c42d51ad382d4936cf9af962f325db820664bb'
+            'fe9dfd79098321faededb85550e3dc78706d60ad80678c3c49de9c1b547095bf'
             '959c94c68cab8d5a8cff185ddf4dca92e84c18dccc6dc7c8fe11c78549cdc2f1')
 sha256sums_aarch64=('2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
 
