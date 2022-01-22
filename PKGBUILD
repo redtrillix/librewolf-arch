@@ -147,6 +147,7 @@ fi
 
   # KDE menu
   # patch -Np1 -i ${_patches_dir}/mozilla-kde.patch
+  # custom patch that does not conflict with the unity patch
   patch -Np1 -i ${srcdir}/mozilla-kde_after_unity.patch
 
   # Disabling Pocket

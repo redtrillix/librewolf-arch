@@ -10,11 +10,11 @@ usermod -d /home/nobody nobody
 # we need to un-expire the account, otherwise PAM will complain
 usermod -e '' nobody
 chown -R nobody .
-if [[ ! -z "${GLOBAL_MENUBAR}" ]];then
-  PKGBUILD_NAME='PKGBUILD_global_menubar'
-fi
+# if [[ ! -z "${GLOBAL_MENUBAR}" ]];then
+  # PKGBUILD_NAME='PKGBUILD_global_menubar'
+# fi
 # makepkg will not run as root
 sudo -u nobody -E -H makepkg --noconfirm --nosign --syncdeps --cleanbuild -p "${PKGBUILD_NAME}"
-if [[ ! -z "${GLOBAL_MENUBAR}" ]];then
-  mv  "librewolf-${pkgver}-${pkgrel}-${CARCH}.pkg.tar.zst" "librewolf-${pkgver}-${pkgrel}-${CARCH}.global_menubar.pkg.tar.zst"
-fi
+# if [[ ! -z "${GLOBAL_MENUBAR}" ]];then
+  # mv  "librewolf-${pkgver}-${pkgrel}-${CARCH}.pkg.tar.zst" "librewolf-${pkgver}-${pkgrel}-${CARCH}.global_menubar.pkg.tar.zst"
+# fi
