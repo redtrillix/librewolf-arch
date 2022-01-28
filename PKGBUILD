@@ -5,7 +5,7 @@
 
 pkgname=librewolf
 _pkgname=LibreWolf
-pkgver=96.0.2
+pkgver=96.0.3
 pkgrel=1
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
@@ -27,17 +27,16 @@ backup=('usr/lib/librewolf/librewolf.cfg'
 options=(!emptydirs !makeflags !strip !lto)
 _arch_git=https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/firefox/trunk
 _common_tag="v${pkgver}-${pkgrel}"
-_settings_tag='5.2'
+_settings_tag='5.4'
 install='librewolf.install'
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
         $pkgname.desktop
         "git+https://gitlab.com/${pkgname}-community/browser/common.git#tag=${_common_tag}"
         "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}"
-        "mozilla-kde_after_unity.patch"
         "default192x192.png"
         )
 source_aarch64=("${pkgver}-${pkgrel}_build-arm-libopus.patch::https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/extra/firefox/build-arm-libopus.patch")
-sha256sums=('d32d2afa9179a78e6ed97e15e0f39e372c0d662cb9614404db15e7616da31ab8'
+sha256sums=('1a741d6fcf20e6833a90169f41d29141ea4610f58b848e06091a683af6304dea'
             '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
             'SKIP'
             'SKIP'
@@ -148,7 +147,7 @@ fi
   # KDE menu
   # patch -Np1 -i ${_patches_dir}/mozilla-kde.patch
   # custom patch that does not conflict with the unity patch
-  patch -Np1 -i ${srcdir}/mozilla-kde_after_unity.patch
+  patch -Np1 -i ${_patches_dir}/mozilla-kde_after_unity.patch
 
   # Disabling Pocket
   patch -Np1 -i ${_patches_dir}/sed-patches/disable-pocket.patch
@@ -183,8 +182,15 @@ fi
   # created directories
   patch -Np1 -i ${_patches_dir}/mozilla_dirs.patch
 
+  # somewhat experimental patch to fix bus/dbus/remoting names to io.gitlab.librewolf
+  # should not break things, buuuuuuuuuut we'll see.
+  patch -Np1 -i ${_patches_dir}/dbus_name.patch
+
   # allow uBlockOrigin to run in private mode by default, without user intervention.
   patch -Np1 -i ${_patches_dir}/allow-ubo-private-mode.patch
+
+  # add custom uBO assets (on first launch only)
+  patch -Np1 -i ${_patches_dir}/custom-ubo-assets-bootstrap-location.patch
 
   # ui patches
 
