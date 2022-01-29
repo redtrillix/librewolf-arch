@@ -6,7 +6,7 @@
 pkgname=librewolf
 _pkgname=LibreWolf
 pkgver=96.0.3
-pkgrel=1
+pkgrel=2
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
 license=(MPL GPL LGPL)
@@ -183,8 +183,7 @@ fi
 
   # somewhat experimental patch to fix bus/dbus/remoting names to io.gitlab.librewolf
   # should not break things, buuuuuuuuuut we'll see.
-  # patch -Np1 -i ${_patches_dir}/dbus_name.patch
-  # narrator: it broke things.
+  patch -Np1 -i ${_patches_dir}/dbus_name.patch
 
   # allow uBlockOrigin to run in private mode by default, without user intervention.
   patch -Np1 -i ${_patches_dir}/allow-ubo-private-mode.patch
