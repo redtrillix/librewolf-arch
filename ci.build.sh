@@ -14,6 +14,7 @@ chown -R nobody .
   # PKGBUILD_NAME='PKGBUILD_global_menubar'
 # fi
 sudo -u nobody -E -H gpg --import KEY
+sudo -u nobody -E -H gpg --lsign-key 14F26682D0916CDD81E37B6D61B7B526D98F0353
 # makepkg will not run as root
 sudo -u nobody -E -H makepkg --noconfirm --nosign --syncdeps --cleanbuild -p "${PKGBUILD_NAME}"
 # if [[ ! -z "${GLOBAL_MENUBAR}" ]];then
