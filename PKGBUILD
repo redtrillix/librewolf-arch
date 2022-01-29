@@ -29,7 +29,7 @@ _arch_git=https://raw.githubusercontent.com/archlinux/svntogit-packages/packages
 _common_tag="v${pkgver}-${pkgrel}"
 _settings_tag='5.4'
 install='librewolf.install'
-source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz
+source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz{,.asc}
         $pkgname.desktop
         "git+https://gitlab.com/${pkgname}-community/browser/common.git#tag=${_common_tag}"
         "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}"
