@@ -43,6 +43,7 @@ sha256sums=('1a741d6fcf20e6833a90169f41d29141ea4610f58b848e06091a683af6304dea'
             'SKIP'
             '959c94c68cab8d5a8cff185ddf4dca92e84c18dccc6dc7c8fe11c78549cdc2f1')
 sha256sums_aarch64=('2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
+validpgpkeys=('14F26682D0916CDD81E37B6D61B7B526D98F0353') # Mozilla Software Releases <release@mozilla.com>
 
 prepare() {
   mkdir -p mozbuild
