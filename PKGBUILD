@@ -11,7 +11,7 @@ pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and 
 arch=(x86_64 aarch64)
 license=(MPL GPL LGPL)
 url="https://librewolf-community.gitlab.io/"
-depends=(gtk3 libxt mime-types dbus-glib ffmpeg4.4 nss ttf-font libpulse)
+depends=(gtk3 libxt mime-types dbus-glib nss ttf-font libpulse)
 makedepends=(unzip zip diffutils yasm mesa imake inetutils xorg-server-xvfb
              autoconf2.13 rust clang llvm jack nodejs cbindgen nasm
              python-setuptools python-psutil python-zstandard git binutils lld dump_syms
@@ -22,6 +22,8 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech'
             'hunspell-en_US: Spell checking, American English'
             'xdg-desktop-portal: Screensharing with Wayland')
+depends_x86_64=(ffmpeg4.4)
+depends_aarch64=(ffmpeg)
 backup=('usr/lib/librewolf/librewolf.cfg'
         'usr/lib/librewolf/distribution/policies.json')
 options=(!emptydirs !makeflags !strip !lto !debug)
