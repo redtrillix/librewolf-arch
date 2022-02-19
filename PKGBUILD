@@ -11,7 +11,7 @@ pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and 
 arch=(x86_64 aarch64)
 license=(MPL GPL LGPL)
 url="https://librewolf-community.gitlab.io/"
-depends=(gtk3 libxt mime-types dbus-glib ffmpeg4 nss ttf-font libpulse)
+depends=(gtk3 libxt mime-types dbus-glib ffmpeg4.4 nss ttf-font libpulse)
 makedepends=(unzip zip diffutils yasm mesa imake inetutils xorg-server-xvfb
              autoconf2.13 rust clang llvm jack nodejs cbindgen nasm
              python-setuptools python-psutil python-zstandard git binutils lld dump_syms
@@ -223,7 +223,7 @@ fi
   # fix telemetry removal, see https://gitlab.com/librewolf-community/browser/linux/-/merge_requests/17, for example
   patch -Np1 -i ${_patches_dir}/disable-data-reporting-at-compile-time.patch
 
-  rm -f ${srcdir}/source/themes/mozconfig # what was this for? TODO
+  rm -f ${srcdir}/source/mozconfig # what was this for? TODO
   cp -r ${srcdir}/source/themes/browser ./
 }
 
