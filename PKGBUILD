@@ -15,7 +15,7 @@ depends=(gtk3 libxt mime-types dbus-glib nss ttf-font libpulse ffmpeg4.4)
 makedepends=(unzip zip diffutils yasm mesa imake inetutils xorg-server-xvfb
              autoconf2.13 rust clang llvm jack nodejs cbindgen nasm
              python-setuptools python-psutil python-zstandard git binutils lld dump_syms
-             wasi-compiler-rt wasi-libc wasi-libc++ wasi-libc++abi)
+             wasi-compiler-rt wasi-libc wasi-libc++ wasi-libc++abi pciutils)
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'libnotify: Notification integration'
             'pulseaudio: Audio support'
