@@ -95,8 +95,8 @@ ac_add_options --disable-tests
 # mk_add_options MOZ_CRASHREPORTER=0
 
 # options for ci / weaker build systems
-mk_add_options MOZ_MAKE_FLAGS="-j4"
-# ac_add_options --enable-linker=gold
+mk_add_options MOZ_MAKE_FLAGS="-j3"
+ac_add_options --enable-linker=gold
 
 # wasi
 ac_add_options --with-wasi-sysroot=/usr/share/wasi-sysroot
