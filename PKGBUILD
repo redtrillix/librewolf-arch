@@ -95,9 +95,8 @@ ac_add_options --disable-tests
 # mk_add_options MOZ_CRASHREPORTER=0
 
 # options for ci / weaker build systems
-mk_add_options MOZ_MAKE_FLAGS="-j3"
-ac_add_options --enable-linker=gold
-
+mk_add_options MOZ_MAKE_FLAGS="-j2"
+# ac_add_options --enable-linker=gold
 # wasi
 ac_add_options --with-wasi-sysroot=/usr/share/wasi-sysroot
 END
@@ -294,7 +293,6 @@ ac_add_options --enable-profile-use=cross
 ac_add_options --with-pgo-profile-path=${PWD@Q}/merged.profdata
 ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
 ac_add_options --enable-linker=lld
-ac_add_options --disable-elf-hack
 ac_add_options --disable-bootstrap
 END
 
