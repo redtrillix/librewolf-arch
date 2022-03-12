@@ -10,9 +10,15 @@ usermod -d /home/nobody nobody
 # we need to un-expire the account, otherwise PAM will complain
 usermod -e '' nobody
 chown -R nobody .
+
+if [[ -n "${AARCH64_PGO}"  ]]; then
+  sed -i 's/_build_profiled_aarch64=false/_build_profiled_aarch64=true/' "${PKGBUILD_NAME}"
+fi
+
 # if [[ ! -z "${GLOBAL_MENUBAR}" ]];then
   # PKGBUILD_NAME='PKGBUILD_global_menubar'
 # fi
+
 sudo -u nobody -E -H gpg --import KEY
 # makepkg will not run as root
 sudo -u nobody -E -H makepkg --noconfirm --nosign --syncdeps --cleanbuild -p "${PKGBUILD_NAME}"

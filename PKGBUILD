@@ -48,6 +48,10 @@ sha256sums=('fd0a4c11d007d9045706667eb0f99f9b7422945188424cb937bfef530cb6f4dd'
 sha256sums_aarch64=('2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e3a7c9')
 validpgpkeys=('14F26682D0916CDD81E37B6D61B7B526D98F0353') # Mozilla Software Releases <release@mozilla.com>
 
+# change this to 1 if you want to try running a PGO build for aarch64 as well
+# currently seemingly broken on our build instances (as of 2022-03-10 / v98.0)
+_build_profiled_aarch64=false
+
 prepare() {
   mkdir -p mozbuild
   cd firefox-$pkgver
@@ -95,7 +99,7 @@ ac_add_options --disable-tests
 # mk_add_options MOZ_CRASHREPORTER=0
 
 # options for ci / weaker build systems
-mk_add_options MOZ_MAKE_FLAGS="-j2"
+# mk_add_options MOZ_MAKE_FLAGS="-j2"
 # ac_add_options --enable-linker=gold
 # wasi
 ac_add_options --with-wasi-sysroot=/usr/share/wasi-sysroot
@@ -238,46 +242,54 @@ build() {
   # CFLAGS="${CFLAGS/-fno-plt/}"
   # CXXFLAGS="${CXXFLAGS/-fno-plt/}"
 
-  # Do 3-tier PGO
-  echo "Building instrumented browser..."
+  local _run_pgo_build=true
 
-if [[ $CARCH == 'aarch64' ]]; then
+  if [[ $CARCH == 'aarch64' ]]; then
+    _run_pgo_build=$_build_profiled_aarch64
+  fi
 
-  cat >.mozconfig ../mozconfig - <<END
+  if [[ $_run_pgo_build == true ]]; then
+
+    # Do 3-tier PGO
+    echo "Building instrumented browser..."
+
+    if [[ $CARCH == 'aarch64' ]]; then
+
+    cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-profile-generate
 END
 
-else
+    else
 
-  cat >.mozconfig ../mozconfig - <<END
+    cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-profile-generate=cross
 END
 
-fi
+    fi
 
-  ./mach build
+    ./mach build
 
-  echo "Profiling instrumented browser..."
-  ./mach package
-  LLVM_PROFDATA=llvm-profdata \
-    JARLOG_FILE="$PWD/jarlog" \
-    xvfb-run -s "-screen 0 1920x1080x24 -nolisten local" \
-    ./mach python build/pgo/profileserver.py
+    echo "Profiling instrumented browser..."
+    ./mach package
+    LLVM_PROFDATA=llvm-profdata \
+      JARLOG_FILE="$PWD/jarlog" \
+      xvfb-run -s "-screen 0 1920x1080x24 -nolisten local" \
+      ./mach python build/pgo/profileserver.py
 
-  stat -c "Profile data found (%s bytes)" merged.profdata
-  test -s merged.profdata
+    stat -c "Profile data found (%s bytes)" merged.profdata
+    test -s merged.profdata
 
-  stat -c "Jar log found (%s bytes)" jarlog
-  test -s jarlog
+    stat -c "Jar log found (%s bytes)" jarlog
+    test -s jarlog
 
-  echo "Removing instrumented browser..."
-  ./mach clobber
+    echo "Removing instrumented browser..."
+    ./mach clobber
 
-  echo "Building optimized browser..."
+    echo "Building optimized browser..."
 
-if [[ $CARCH == 'aarch64' ]]; then
+    if [[ $CARCH == 'aarch64' ]]; then
 
-  cat >.mozconfig ../mozconfig - <<END
+    cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-lto
 ac_add_options --enable-profile-use
 ac_add_options --with-pgo-profile-path=${PWD@Q}/merged.profdata
@@ -285,9 +297,9 @@ ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
 ac_add_options --enable-linker=lld
 END
 
-else
+    else
 
-  cat >.mozconfig ../mozconfig - <<END
+    cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-lto=cross
 ac_add_options --enable-profile-use=cross
 ac_add_options --with-pgo-profile-path=${PWD@Q}/merged.profdata
@@ -296,7 +308,8 @@ ac_add_options --enable-linker=lld
 ac_add_options --disable-bootstrap
 END
 
-fi
+    fi
+  fi # end $_run_pgo_build
 
   ./mach build
 
