@@ -15,7 +15,7 @@ depends=(gtk3 libxt mime-types dbus-glib nss ttf-font libpulse ffmpeg4.4)
 makedepends=(unzip zip diffutils yasm mesa imake inetutils xorg-server-xvfb
              autoconf2.13 rust clang llvm jack nodejs cbindgen nasm
              python-setuptools python-psutil python-zstandard git binutils lld dump_syms
-             wasi-compiler-rt wasi-libc wasi-libc++ wasi-libc++abi pciutils)
+             wasi-compiler-rt wasi-libc wasi-libc++ wasi-libc++abi) # pciutils: only to avoid some PGO warning
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'libnotify: Notification integration'
             'pulseaudio: Audio support'
@@ -99,7 +99,7 @@ ac_add_options --disable-tests
 # mk_add_options MOZ_CRASHREPORTER=0
 
 # options for ci / weaker build systems
-# mk_add_options MOZ_MAKE_FLAGS="-j2"
+# mk_add_options MOZ_MAKE_FLAGS="-j4"
 # ac_add_options --enable-linker=gold
 # wasi
 ac_add_options --with-wasi-sysroot=/usr/share/wasi-sysroot
