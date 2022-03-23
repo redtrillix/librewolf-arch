@@ -52,9 +52,8 @@ sha256sums_aarch64=('2d4d91f7e35d0860225084e37ec320ca6cae669f6c9c8fe7735cdbd542e
                     '2bb0ac385b54972eb3e665ac70fb13565ed9da77b33349b844b2e0ad4948cff5')
 validpgpkeys=('14F26682D0916CDD81E37B6D61B7B526D98F0353') # Mozilla Software Releases <release@mozilla.com>
 
-# change this to 1 if you want to try running a PGO build for aarch64 as well
-# currently seemingly broken on our build instances (as of 2022-03-10 / v98.0)
-_build_profiled_aarch64=false
+# change this to false if you do not want to run a PGO build for aarch64 as well
+_build_profiled_aarch64=true
 
 prepare() {
   mkdir -p mozbuild
