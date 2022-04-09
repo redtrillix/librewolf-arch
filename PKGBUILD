@@ -29,13 +29,13 @@ _arch_git=https://raw.githubusercontent.com/archlinux/svntogit-packages/packages
 # _source_tag=99.0-1
 _source_commit='94365400be86a22b7aaaba86627c0aca7dc8f50a' # not 'stable', but current source head
 # _common_tag="v${pkgver}-${pkgrel}"
-_settings_tag='6.1'
-# _settings_commit='d049197f6b31636a18cd410a3dce1a7c9fca8e4c' # 5.5 with updated ublock
+# _settings_tag='6.1'
+_settings_commit='bc71d27b8efacf6dcc3fe2c62d3fc5555e4e0890' # hottest of fixes: 6.1 with a pref fix on top ^^
 install='librewolf.install'
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz{,.asc}
         $pkgname.desktop
         "git+https://gitlab.com/${pkgname}-community/browser/source.git#commit=${_source_commit}"
-        "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}"
+        "git+https://gitlab.com/${pkgname}-community/settings.git#commit=${_settings_commit}"
         "default192x192.png"
         "0028-bgo-831903-pip-dont-fail-with-optional-deps.patch"
         "0029-skip-pip-check.patch"
@@ -81,7 +81,19 @@ export CXX='clang++'
 # Branding
 ac_add_options --enable-update-channel=release
 ac_add_options --with-app-name=${pkgname}
-ac_add_options --with-app-basename=${_pkgname}
+
+# ac_add_options --with-app-basename=${_pkgname}
+
+# switch to env vars like in librewolf source repo
+# this is in browser/branding/librewolf/configure.sh as well
+# so it _should_ already be applied, buuuuut just in case?
+
+MOZ_APP_NAME=${pkgname}
+MOZ_APP_BASENAME=${_pkgname}
+MOZ_APP_PROFILE=${pkgname}
+MOZ_APP_VENDOR=${_pkgname}
+MOZ_APP_DISPLAYNAME=${_pkgname}
+
 ac_add_options --with-branding=browser/branding/${pkgname}
 ac_add_options --with-distribution-id=io.gitlab.${pkgname}-community
 ac_add_options --with-unsigned-addon-scopes=app,system
@@ -101,7 +113,11 @@ ac_add_options --disable-updater
 ac_add_options --disable-tests
 
 # obsoleted?
-# mk_add_options MOZ_CRASHREPORTER=0
+# TODO: use source/assets/moczonfig in the future
+mk_add_options MOZ_CRASHREPORTER=0
+mk_add_options MOZ_DATA_REPORTING=0
+mk_add_options MOZ_SERVICES_HEALTHREPORT=0
+mk_add_options MOZ_TELEMETRY_REPORTING=0
 
 # options for ci / weaker build systems
 # mk_add_options MOZ_MAKE_FLAGS="-j4"
