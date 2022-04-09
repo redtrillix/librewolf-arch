@@ -141,7 +141,7 @@ END
   # ...or maybe not?
   export LDFLAGS+=" -Wl,--no-keep-memory"
   # patch -Np1 -i ${_patches_dir}/arm.patch # not required anymore?
-  patch -Np1 -i ../${pkgver}-${pkgrel}_build-arm-libopus.patch
+  # patch -Np1 -i ../${pkgver}-${pkgrel}_build-arm-libopus.patch
 
   # https://github.com/archlinuxarm/PKGBUILDs/commit/434abe24fa6bc70940b2f1e69e047af38b4be68a
   # Firefox 98+ fails to draw its window on aarch64.
