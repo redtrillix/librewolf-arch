@@ -29,7 +29,9 @@ variables:
 
 arch_x86_64:
   image: archlinux/archlinux:base-devel
-  tags: [docker linux]
+  tags:
+    - docker
+    - linux
   <<: *carch_x86_64
   <<: *arch_build_config
   only:
