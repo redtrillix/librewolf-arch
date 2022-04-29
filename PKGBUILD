@@ -6,7 +6,7 @@
 pkgname=librewolf
 _pkgname=LibreWolf
 pkgver=99.0.1
-pkgrel=1
+pkgrel=4
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
 license=(MPL GPL LGPL)
@@ -28,8 +28,7 @@ options=(!emptydirs !makeflags !strip !lto !debug)
 _arch_git=https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/firefox/trunk
 _source_tag="${pkgver}-${pkgrel}"
 # _source_commit='94365400be86a22b7aaaba86627c0aca7dc8f50a' # not 'stable', but current source head
-# _common_tag="v${pkgver}-${pkgrel}"
-_settings_tag='6.2'
+_settings_tag='6.3'
 # _settings_commit='1a84d38bab56551f9ec2650644c4906650e75603' # hottest of fixes: 6.1 with a pref fix on top ^^
 install='librewolf.install'
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz{,.asc}
@@ -75,6 +74,9 @@ ac_add_options --prefix=/usr
 ac_add_options --enable-release
 ac_add_options --enable-hardening
 ac_add_options --enable-rust-simd
+ac_add_options --enable-linker=lld
+ac_add_options --disable-bootstrap
+
 export CC='clang'
 export CXX='clang++'
 
@@ -95,7 +97,7 @@ MOZ_APP_VENDOR=${_pkgname}
 MOZ_APP_DISPLAYNAME=${_pkgname}
 
 ac_add_options --with-branding=browser/branding/${pkgname}
-ac_add_options --with-distribution-id=io.gitlab.${pkgname}-community
+# ac_add_options --with-distribution-id=io.gitlab.${pkgname}-community
 ac_add_options --with-unsigned-addon-scopes=app,system
 ac_add_options --allow-addon-sideload
 export MOZ_REQUIRE_SIGNING=
@@ -122,6 +124,7 @@ mk_add_options MOZ_TELEMETRY_REPORTING=0
 # options for ci / weaker build systems
 # mk_add_options MOZ_MAKE_FLAGS="-j4"
 # ac_add_options --enable-linker=gold
+
 # wasi
 ac_add_options --with-wasi-sysroot=/usr/share/wasi-sysroot
 END
@@ -157,6 +160,9 @@ else
   cat >>../mozconfig <<END
 # probably not needed, enabled by default?
 ac_add_options --enable-optimize
+
+# Arch upstream has it in their PKGBUILD, ALARM does not for aarch64:
+ac_add_options --disable-elf-hack
 END
 fi
 
@@ -240,6 +246,9 @@ fi
   #
   patch -Np1 -i ${_patches_dir}/ui-patches/hide-default-browser.patch
 
+  # Add LibreWolf logo to Debugging Page
+  patch -Np1 -i ${_patches_dir}/ui-patches/lw-logo-devtools.patch
+
   #
   patch -Np1 -i ${_patches_dir}/ui-patches/privacy-preferences.patch
 
@@ -267,6 +276,9 @@ fi
   # fix telemetry removal, see https://gitlab.com/librewolf-community/browser/linux/-/merge_requests/17, for example
   patch -Np1 -i ${_patches_dir}/disable-data-reporting-at-compile-time.patch
 
+  # allows hiding the password manager (from the lw pref pane) / via a pref
+  patch -Np1 -i ${_patches_dir}/hide-passwordmgr.patch
+
   rm -f ${srcdir}/source/mozconfig # what was this for? TODO
   cp -r ${srcdir}/source/themes/browser ./
 }
@@ -287,18 +299,10 @@ build() {
   # CFLAGS="${CFLAGS/-fno-plt/}"
   # CXXFLAGS="${CXXFLAGS/-fno-plt/}"
 
-  local _run_pgo_build=true
+  # Do 3-tier PGO
+  echo "Building instrumented browser..."
 
   if [[ $CARCH == 'aarch64' ]]; then
-    _run_pgo_build=$_build_profiled_aarch64
-  fi
-
-  if [[ $_run_pgo_build == true ]]; then
-
-    # Do 3-tier PGO
-    echo "Building instrumented browser..."
-
-    if [[ $CARCH == 'aarch64' ]]; then
 
     cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-profile-generate
@@ -310,29 +314,29 @@ END
 ac_add_options --enable-profile-generate=cross
 END
 
-    fi
+  fi
 
-    ./mach build
+  ./mach build
 
-    echo "Profiling instrumented browser..."
-    ./mach package
-    LLVM_PROFDATA=llvm-profdata \
-      JARLOG_FILE="$PWD/jarlog" \
-      xvfb-run -s "-screen 0 1920x1080x24 -nolisten local" \
-      ./mach python build/pgo/profileserver.py
+  echo "Profiling instrumented browser..."
+  ./mach package
+  LLVM_PROFDATA=llvm-profdata \
+    JARLOG_FILE="$PWD/jarlog" \
+    xvfb-run -s "-screen 0 1920x1080x24 -nolisten local" \
+    ./mach python build/pgo/profileserver.py
 
-    stat -c "Profile data found (%s bytes)" merged.profdata
-    test -s merged.profdata
+  stat -c "Profile data found (%s bytes)" merged.profdata
+  test -s merged.profdata
 
-    stat -c "Jar log found (%s bytes)" jarlog
-    test -s jarlog
+  stat -c "Jar log found (%s bytes)" jarlog
+  test -s jarlog
 
-    echo "Removing instrumented browser..."
-    ./mach clobber
+  echo "Removing instrumented browser..."
+  ./mach clobber
 
-    echo "Building optimized browser..."
+  echo "Building optimized browser..."
 
-    if [[ $CARCH == 'aarch64' ]]; then
+  if [[ $CARCH == 'aarch64' ]]; then
 
     cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-lto
@@ -341,7 +345,7 @@ ac_add_options --with-pgo-profile-path=${PWD@Q}/merged.profdata
 ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
 END
 
-    else
+  else
 
     cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-lto=cross
@@ -350,13 +354,12 @@ ac_add_options --with-pgo-profile-path=${PWD@Q}/merged.profdata
 ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
 END
 
-    fi
-  fi # end $_run_pgo_build
+  fi
 
-    cat >.mozconfig ../mozconfig - <<END
-ac_add_options --enable-linker=lld
-ac_add_options --disable-bootstrap
-END
+  # cat >>.mozconfig <<END
+# ac_add_options --enable-linker=lld
+# ac_add_options --disable-bootstrap
+# END
 
   ./mach build
 
