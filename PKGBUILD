@@ -15,7 +15,7 @@ depends=(gtk3 libxt mime-types dbus-glib nss ttf-font libpulse ffmpeg)
 makedepends=(unzip zip diffutils yasm mesa imake inetutils xorg-server-xvfb
              autoconf2.13 rust clang llvm jack nodejs cbindgen nasm
              python-setuptools python-psutil python-zstandard git binutils lld dump_syms
-             wasi-compiler-rt wasi-libc wasi-libc++ wasi-libc++abi) # pciutils: only to avoid some PGO warning
+             wasi-compiler-rt wasi-libc wasi-libc++ wasi-libc++abi pciutils) # pciutils: only to avoid some PGO warning
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'libnotify: Notification integration'
             'pulseaudio: Audio support'
@@ -49,7 +49,7 @@ sha256sums=('76d22279ce99588a728bb2d034064be0d5918b5900631f2148d4565b8a72e00b'
             '959c94c68cab8d5a8cff185ddf4dca92e84c18dccc6dc7c8fe11c78549cdc2f1'
             '582303b7d97dae11f1c760e129be03e270a0800a0bae9e140c032e57ae00c06d'
             '35eaa5ad3ade5351dc072f7e3e240265818d40c77c637dfdb492a91128b65d27'
-            '3735197d2c6c38b0482ae56a7b7dbd5815a38042ba7e1418cd93cdea1b564391')
+            '9dd0d63d46e478b0a80c2ea80bddb3075f622864caa88e0bdc8f218c41d240ed')
 sha256sums_aarch64=('2bb0ac385b54972eb3e665ac70fb13565ed9da77b33349b844b2e0ad4948cff5')
 validpgpkeys=('14F26682D0916CDD81E37B6D61B7B526D98F0353') # Mozilla Software Releases <release@mozilla.com>
 
@@ -163,6 +163,9 @@ ac_add_options --enable-optimize
 
 # Arch upstream has it in their PKGBUILD, ALARM does not for aarch64:
 ac_add_options --disable-elf-hack
+
+# might help with failing x86_64 builds?
+export LDFLAGS+=" -Wl,--no-keep-memory"
 END
 fi
 
@@ -289,6 +292,7 @@ build() {
 
   export MOZ_NOSPAM=1
   export MOZBUILD_STATE_PATH="$srcdir/mozbuild"
+  # export MOZ_ENABLE_FULL_SYMBOLS=1
   export MACH_USE_SYSTEM_PYTHON=1
 
   # LTO needs more open files
@@ -319,7 +323,9 @@ END
   ./mach build
 
   echo "Profiling instrumented browser..."
+
   ./mach package
+
   LLVM_PROFDATA=llvm-profdata \
     JARLOG_FILE="$PWD/jarlog" \
     xvfb-run -s "-screen 0 1920x1080x24 -nolisten local" \
