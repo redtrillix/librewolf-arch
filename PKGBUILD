@@ -38,7 +38,7 @@ source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-
 # source_aarch64=()
 sha256sums=('664c0cc4e0fb70886aa4e652d144996045d533a18eebc7d61093103cbb2d5e7f'
             'SKIP'
-            '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
+            '21054a5f41f38a017f3e1050ccc433d8e59304864021bef6b99f0d0642ccbe93'
             'SKIP'
             'SKIP'
             '959c94c68cab8d5a8cff185ddf4dca92e84c18dccc6dc7c8fe11c78549cdc2f1'
