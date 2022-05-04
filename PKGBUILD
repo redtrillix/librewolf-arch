@@ -5,8 +5,8 @@
 
 pkgname=librewolf
 _pkgname=LibreWolf
-pkgver=99.0.1
-pkgrel=4
+pkgver=100.0
+pkgrel=1
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
 license=(MPL GPL LGPL)
@@ -14,7 +14,7 @@ url="https://librewolf-community.gitlab.io/"
 depends=(gtk3 libxt mime-types dbus-glib nss ttf-font libpulse ffmpeg)
 makedepends=(unzip zip diffutils yasm mesa imake inetutils xorg-server-xvfb
              autoconf2.13 rust clang llvm jack nodejs cbindgen nasm
-             python-setuptools python-psutil python-zstandard git binutils lld dump_syms
+             python-setuptools python-zstandard git binutils lld dump_syms
              wasi-compiler-rt wasi-libc wasi-libc++ wasi-libc++abi pciutils) # pciutils: only to avoid some PGO warning
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'libnotify: Notification integration'
@@ -26,31 +26,27 @@ backup=('usr/lib/librewolf/librewolf.cfg'
         'usr/lib/librewolf/distribution/policies.json')
 options=(!emptydirs !makeflags !strip !lto !debug)
 _arch_git=https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/firefox/trunk
-_source_tag="${pkgver}-${pkgrel}"
-# _source_commit='94365400be86a22b7aaaba86627c0aca7dc8f50a' # not 'stable', but current source head
-_settings_tag='6.3'
+# _source_tag="${pkgver}-${pkgrel}"
+_source_commit='c63b95219b4eec641ebc9af0b84697a618fa3bcf' # not 'stable', but current source head
+_settings_tag='6.4'
 # _settings_commit='1a84d38bab56551f9ec2650644c4906650e75603' # hottest of fixes: 6.1 with a pref fix on top ^^
 install='librewolf.install'
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz{,.asc}
         $pkgname.desktop
-        "git+https://gitlab.com/${pkgname}-community/browser/source.git#tag=${_source_tag}"
+        "git+https://gitlab.com/${pkgname}-community/browser/source.git#commit=${_source_commit}"
         "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}"
         "default192x192.png"
-        "0028-bgo-831903-pip-dont-fail-with-optional-deps.patch"
-        "0029-skip-pip-check.patch"
-        "0031-pgo-use-toolchain-disable-watchdog-fix-on-gcc.patch"
+        "0018-bmo-1516081-Disable-watchdog-during-PGO-builds.patch"
         )
-source_aarch64=("${pkgver}-${pkgrel}_psutil-remove-version-cap.patch::https://github.com/archlinuxarm/PKGBUILDs/raw/434abe24fa6bc70940b2f1e69e047af38b4be68a/extra/firefox/psutil-remove-version-cap.patch")
-sha256sums=('76d22279ce99588a728bb2d034064be0d5918b5900631f2148d4565b8a72e00b'
+# source_aarch64=()
+sha256sums=('664c0cc4e0fb70886aa4e652d144996045d533a18eebc7d61093103cbb2d5e7f'
             'SKIP'
             '0b28ba4cc2538b7756cb38945230af52e8c4659b2006262da6f3352345a8bed2'
             'SKIP'
             'SKIP'
             '959c94c68cab8d5a8cff185ddf4dca92e84c18dccc6dc7c8fe11c78549cdc2f1'
-            '582303b7d97dae11f1c760e129be03e270a0800a0bae9e140c032e57ae00c06d'
-            '35eaa5ad3ade5351dc072f7e3e240265818d40c77c637dfdb492a91128b65d27'
-            '9dd0d63d46e478b0a80c2ea80bddb3075f622864caa88e0bdc8f218c41d240ed')
-sha256sums_aarch64=('2bb0ac385b54972eb3e665ac70fb13565ed9da77b33349b844b2e0ad4948cff5')
+            'ea172cd8ade700fc46e9afcdec52718d9fea17bb7ddf93c75b3b6bb4944cef78')
+# sha256sums_aarch64=()
 validpgpkeys=('14F26682D0916CDD81E37B6D61B7B526D98F0353') # Mozilla Software Releases <release@mozilla.com>
 
 # change this to false if you do not want to run a PGO build for aarch64 as well
@@ -146,15 +142,6 @@ END
   # patch -Np1 -i ${_patches_dir}/arm.patch # not required anymore?
   # patch -Np1 -i ../${pkgver}-${pkgrel}_build-arm-libopus.patch
 
-  # https://github.com/archlinuxarm/PKGBUILDs/commit/434abe24fa6bc70940b2f1e69e047af38b4be68a
-  # Firefox 98+ fails to draw its window on aarch64.
-  # Upstream: https://bugzilla.mozilla.org/show_bug.cgi?id=1757571
-
-  # Also add a hack to remove the psutil version cap, since otherwise it
-  # fails to build with the latest python-psutil version (for no reason).
-
-  patch -Np1 -i ../${pkgver}-${pkgrel}_psutil-remove-version-cap.patch
-
 else
 
   cat >>../mozconfig <<END
@@ -174,13 +161,11 @@ fi
   # patch -Np1 -i ${srcdir}/0001-Use-remoting-name-for-GDK-application-names.patch
 
   # upstream patches from gentoo
-  # hopefully fixing the pip issues people have every now and then
-
-  patch -Np1 -i ../0028-bgo-831903-pip-dont-fail-with-optional-deps.patch
-  patch -Np1 -i ../0029-skip-pip-check.patch
 
   # pgo improvements
-  patch -Np1 -i ../0031-pgo-use-toolchain-disable-watchdog-fix-on-gcc.patch
+  patch -Np1 -i ../0018-bmo-1516081-Disable-watchdog-during-PGO-builds.patch
+
+  # pip issues seem to be fixed upstream?
 
   # LibreWolf
 
@@ -293,7 +278,7 @@ build() {
   export MOZ_NOSPAM=1
   export MOZBUILD_STATE_PATH="$srcdir/mozbuild"
   # export MOZ_ENABLE_FULL_SYMBOLS=1
-  export MACH_USE_SYSTEM_PYTHON=1
+  export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
 
   # LTO needs more open files
   ulimit -n 4096
