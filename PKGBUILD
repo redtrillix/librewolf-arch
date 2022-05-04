@@ -1,7 +1,4 @@
 # Maintainer: ohfp
-# Contributor: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
-# Contributor: Ionut Biru <ibiru@archlinux.org>
-# Contributor: Jakub Schmidtke <sjakub@gmail.com>
 
 pkgname=librewolf
 _pkgname=LibreWolf
@@ -10,7 +7,7 @@ pkgrel=1
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
 license=(MPL GPL LGPL)
-url="https://librewolf-community.gitlab.io/"
+url="https://librewolf.net/"
 depends=(gtk3 libxt mime-types dbus-glib nss ttf-font libpulse ffmpeg)
 makedepends=(unzip zip diffutils yasm mesa imake inetutils xorg-server-xvfb
              autoconf2.13 rust clang llvm jack nodejs cbindgen nasm
@@ -82,16 +79,6 @@ ac_add_options --with-app-name=${pkgname}
 
 # ac_add_options --with-app-basename=${_pkgname}
 
-# switch to env vars like in librewolf source repo
-# this is in browser/branding/librewolf/configure.sh as well
-# so it _should_ already be applied, buuuuut just in case?
-
-MOZ_APP_NAME=${pkgname}
-MOZ_APP_BASENAME=${_pkgname}
-MOZ_APP_PROFILE=${pkgname}
-MOZ_APP_VENDOR=${_pkgname}
-MOZ_APP_DISPLAYNAME=${_pkgname}
-
 ac_add_options --with-branding=browser/branding/${pkgname}
 # ac_add_options --with-distribution-id=io.gitlab.${pkgname}-community
 ac_add_options --with-unsigned-addon-scopes=app,system
@@ -109,13 +96,6 @@ ac_add_options --enable-jack
 ac_add_options --disable-crashreporter
 ac_add_options --disable-updater
 ac_add_options --disable-tests
-
-# obsoleted?
-# TODO: use source/assets/moczonfig in the future
-mk_add_options MOZ_CRASHREPORTER=0
-mk_add_options MOZ_DATA_REPORTING=0
-mk_add_options MOZ_SERVICES_HEALTHREPORT=0
-mk_add_options MOZ_TELEMETRY_REPORTING=0
 
 # options for ci / weaker build systems
 # mk_add_options MOZ_MAKE_FLAGS="-j4"
@@ -203,11 +183,6 @@ fi
   patch -Np1 -i ${_patches_dir}/context-menu.patch
   patch -Np1 -i ${_patches_dir}/urlbarprovider-interventions.patch
 
-
-  # allow overriding the color scheme light/dark preference with RFP
-  # deprecated, will probably be dropped soon
-  # patch -Np1 -i ${_patches_dir}/allow_dark_preference_with_rfp.patch
-
   # change some hardcoded directory strings that could lead to unnecessarily
   # created directories
   patch -Np1 -i ${_patches_dir}/mozilla_dirs.patch
@@ -282,11 +257,6 @@ build() {
 
   # LTO needs more open files
   ulimit -n 4096
-
-  # -fno-plt with cross-LTO causes obscure LLVM errors
-  # LLVM ERROR: Function Import: link error
-  # CFLAGS="${CFLAGS/-fno-plt/}"
-  # CXXFLAGS="${CXXFLAGS/-fno-plt/}"
 
   # Do 3-tier PGO
   echo "Building instrumented browser..."
@@ -380,6 +350,7 @@ END
 
   local distini="$pkgdir/usr/lib/$pkgname/distribution/distribution.ini"
   install -Dvm644 /dev/stdin "$distini" <<END
+
 [Global]
 id=io.gitlab.${pkgname}-community
 version=1.0
