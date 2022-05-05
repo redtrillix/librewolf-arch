@@ -3,7 +3,7 @@
 pkgname=librewolf
 _pkgname=LibreWolf
 pkgver=100.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
 license=(MPL GPL LGPL)
@@ -24,7 +24,7 @@ backup=('usr/lib/librewolf/librewolf.cfg'
 options=(!emptydirs !makeflags !strip !lto !debug)
 _arch_git=https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/firefox/trunk
 # _source_tag="${pkgver}-${pkgrel}"
-_source_commit='c63b95219b4eec641ebc9af0b84697a618fa3bcf' # not 'stable', but current source head
+# _source_commit='63e85e5a55c9efc38b9ff45e822fb55c076f045a' # not 'stable', but current source head
 _settings_tag='6.4'
 # _settings_commit='1a84d38bab56551f9ec2650644c4906650e75603' # hottest of fixes: 6.1 with a pref fix on top ^^
 install='librewolf.install'
@@ -63,6 +63,13 @@ mk_add_options MOZ_OBJDIR=${PWD@Q}/obj
 ac_add_options --disable-tests
 ac_add_options --disable-debug
 
+# TODO: use source/assets/moczonfig in the future
+# NOTE: let us use it for one last build, otherwise, there might be some conflicts
+mk_add_options MOZ_CRASHREPORTER=0
+mk_add_options MOZ_DATA_REPORTING=0
+mk_add_options MOZ_SERVICES_HEALTHREPORT=0
+mk_add_options MOZ_TELEMETRY_REPORTING=0
+
 ac_add_options --prefix=/usr
 ac_add_options --enable-release
 ac_add_options --enable-hardening
@@ -95,7 +102,6 @@ ac_add_options --enable-alsa
 ac_add_options --enable-jack
 ac_add_options --disable-crashreporter
 ac_add_options --disable-updater
-ac_add_options --disable-tests
 
 # options for ci / weaker build systems
 # mk_add_options MOZ_MAKE_FLAGS="-j4"
@@ -191,6 +197,9 @@ fi
   # should not break things, buuuuuuuuuut we'll see.
   patch -Np1 -i ${_patches_dir}/dbus_name.patch
 
+  # add v100 about dialog
+  patch -Np1 -i ${_patches_dir}/aboutLogos.patch
+
   # allow uBlockOrigin to run in private mode by default, without user intervention.
   patch -Np1 -i ${_patches_dir}/allow-ubo-private-mode.patch
 
@@ -229,6 +238,9 @@ fi
 
   # add warning that sanitizing exceptions are bypassed by the options in History > Clear History when LibreWolf closes > Settings
   patch -Np1 -i ${_patches_dir}/ui-patches/sanitizing-description.patch
+
+  # add patch to hide website appearance settings
+  patch -Np1 -i ${_patches_dir}/ui-patches/website-appearance-ui-rfp.patch
 
   #
   patch -Np1 -i ${_patches_dir}/ui-patches/handlers.patch
