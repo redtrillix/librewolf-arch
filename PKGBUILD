@@ -23,14 +23,14 @@ backup=('usr/lib/librewolf/librewolf.cfg'
         'usr/lib/librewolf/distribution/policies.json')
 options=(!emptydirs !makeflags !strip !lto !debug)
 _arch_git=https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/firefox/trunk
-# _source_tag="${pkgver}-${pkgrel}"
+_source_tag="${pkgver}-${pkgrel}"
 # _source_commit='63e85e5a55c9efc38b9ff45e822fb55c076f045a' # not 'stable', but current source head
 _settings_tag='6.4'
 # _settings_commit='1a84d38bab56551f9ec2650644c4906650e75603' # hottest of fixes: 6.1 with a pref fix on top ^^
 install='librewolf.install'
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz{,.asc}
         $pkgname.desktop
-        "git+https://gitlab.com/${pkgname}-community/browser/source.git#commit=${_source_commit}"
+        "git+https://gitlab.com/${pkgname}-community/browser/source.git#tag=${_source_tag}"
         "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}"
         "default192x192.png"
         "0018-bmo-1516081-Disable-watchdog-during-PGO-builds.patch"
