@@ -1,4 +1,4 @@
-# Maintainer: ohfp
+# Maintainer: ohfp/lsf <lsf at pfho dot net>
 
 pkgname=librewolf
 _pkgname=LibreWolf
