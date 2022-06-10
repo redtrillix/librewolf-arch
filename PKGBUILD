@@ -34,6 +34,7 @@ source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-
         "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}"
         "default192x192.png"
         "0018-bmo-1516081-Disable-watchdog-during-PGO-builds.patch"
+        "0032-bmo-1773259-cbindgen-root_clip_chain-fix.patch"
         )
 # source_aarch64=()
 sha256sums=('b4c76e8bdf81f473f3e56b2f69dbe5119bba5cab38e36ab0f3f38cf0cdc4a9c2'
@@ -42,7 +43,8 @@ sha256sums=('b4c76e8bdf81f473f3e56b2f69dbe5119bba5cab38e36ab0f3f38cf0cdc4a9c2'
             'SKIP'
             'SKIP'
             '959c94c68cab8d5a8cff185ddf4dca92e84c18dccc6dc7c8fe11c78549cdc2f1'
-            'ea172cd8ade700fc46e9afcdec52718d9fea17bb7ddf93c75b3b6bb4944cef78')
+            'ea172cd8ade700fc46e9afcdec52718d9fea17bb7ddf93c75b3b6bb4944cef78'
+            'd3ea2503dff0a602bb058153533ebccd8232e8aac1dc82437a55d724b8d22bc2')
 # sha256sums_aarch64=()
 validpgpkeys=('14F26682D0916CDD81E37B6D61B7B526D98F0353') # Mozilla Software Releases <release@mozilla.com>
 
@@ -150,6 +152,9 @@ fi
 
   # pgo improvements
   patch -Np1 -i ../0018-bmo-1516081-Disable-watchdog-during-PGO-builds.patch
+
+  # address build failure when building with most recent (>=0.24.0) cbindgen
+  patch -Np1 -i ../0032-bmo-1773259-cbindgen-root_clip_chain-fix.patch
 
   # pip issues seem to be fixed upstream?
 
