@@ -154,7 +154,12 @@ fi
   patch -Np1 -i ../0018-bmo-1516081-Disable-watchdog-during-PGO-builds.patch
 
   # address build failure when building with most recent (>=0.24.0) cbindgen
-  patch -Np1 -i ../0032-bmo-1773259-cbindgen-root_clip_chain-fix.patch
+  # also catch systems (Manjaro, at the time of writing this) where cbindgen
+  # is not yet at 24. probably not elegant, but it works.
+  _cbindgen_ver=$(cbindgen --version | sed -e 's/cbindgen[[:space:]]0.\([0-9]*\).[0-9]/\1/g')
+  if [ "${_cbindgen_ver}" -gt 23 ]; then
+    patch -Np1 -i ../0032-bmo-1773259-cbindgen-root_clip_chain-fix.patch
+  fi
 
   # pip issues seem to be fixed upstream?
 
