@@ -12,7 +12,7 @@ depends=(gtk3 libxt mime-types dbus-glib nss ttf-font libpulse ffmpeg)
 makedepends=(unzip zip diffutils yasm mesa imake inetutils xorg-server-xvfb
              autoconf2.13 rust clang llvm jack nodejs cbindgen nasm
              python-setuptools python-zstandard git binutils lld dump_syms
-             wasi-compiler-rt wasi-libc wasi-libc++ wasi-libc++abi pciutils) # pciutils: only to avoid some PGO warning
+             'wasi-compiler-rt>13' 'wasi-libc>=1:0+258+30094b6-1' 'wasi-libc++>13' 'wasi-libc++abi>13' pciutils) # pciutils: only to avoid some PGO warning
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'libnotify: Notification integration'
             'pulseaudio: Audio support'
