@@ -7,7 +7,7 @@ pacman --noconfirm -Syu --needed base-devel gnupg
 # while they are unavailable for aarch64/ALARM
 
 if [[ ${CARCH} = "aarch64"  ]]; then
-  pacman --noconfirm --needed wget
+  pacman --noconfirm --needed -S wget
   wget https://archlinux.org/packages/community/any/wasi-compiler-rt/download -O wasi-compiler-rt-14.0.6-1-any.pkg.tar.zst
   wget https://archlinux.org/packages/community/any/wasi-libc/download -O wasi-libc-1_0+258+30094b6-1-any.pkg.tar.zst
   wget https://archlinux.org/packages/community/any/wasi-libc++/download -O wasi-libc++-14.0.6-1-any.pkg.tar.zst
