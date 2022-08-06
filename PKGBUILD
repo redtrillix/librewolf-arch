@@ -2,8 +2,8 @@
 
 pkgname=librewolf
 _pkgname=LibreWolf
-pkgver=103.0
-pkgrel=3
+pkgver=103.0.1
+pkgrel=1
 pkgdesc="Community-maintained fork of Firefox, focused on privacy, security and freedom."
 arch=(x86_64 aarch64)
 license=(MPL GPL LGPL)
@@ -25,19 +25,19 @@ options=(!emptydirs !makeflags !strip !lto !debug)
 _arch_git=https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/firefox/trunk
 _source_tag="${pkgver}-${pkgrel}"
 # _source_commit='328f531b1b18ca0ba4f96483db89eeb129c41c4c' # not 'stable', but current source head
-# _settings_tag='6.7'
-_settings_commit='02212c3f44e7aa68b22c8febd9158580d7e4b74f'
+_settings_tag='6.7'
+# _settings_commit='02212c3f44e7aa68b22c8febd9158580d7e4b74f'
 install='librewolf.install'
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz{,.asc}
         https://raw.githubusercontent.com/archlinux/svntogit-packages/1f6f9abcdcb2a03f259602b4671208b15cc6d4b9/trunk/zstandard-0.18.0.diff
         $pkgname.desktop
         "git+https://gitlab.com/${pkgname}-community/browser/source.git#tag=${_source_tag}"
-        "git+https://gitlab.com/${pkgname}-community/settings.git#commit=${_settings_commit}"
+        "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}"
         "default192x192.png"
         "0018-bmo-1516081-Disable-watchdog-during-PGO-builds.patch"
         )
 # source_aarch64=()
-sha256sums=('acc41d050560db4c4177ea86e2d00e47d74229041fea4c02c0e9e87e64093773'
+sha256sums=('b2db4df5fae0801e6406686876e8115d9529fb93a01566f22548908ca6c2cf82'
             'SKIP'
             'a6857ad2f2e2091c6c4fdcde21a59fbeb0138914c0e126df64b50a5af5ff63be'
             '21054a5f41f38a017f3e1050ccc433d8e59304864021bef6b99f0d0642ccbe93'
