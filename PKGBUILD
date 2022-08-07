@@ -35,6 +35,7 @@ source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-
         "git+https://gitlab.com/${pkgname}-community/settings.git#tag=${_settings_tag}"
         "default192x192.png"
         "0018-bmo-1516081-Disable-watchdog-during-PGO-builds.patch"
+        "glibc236.patch"
         )
 # source_aarch64=()
 sha256sums=('b2db4df5fae0801e6406686876e8115d9529fb93a01566f22548908ca6c2cf82'
@@ -44,7 +45,8 @@ sha256sums=('b2db4df5fae0801e6406686876e8115d9529fb93a01566f22548908ca6c2cf82'
             'SKIP'
             'SKIP'
             '959c94c68cab8d5a8cff185ddf4dca92e84c18dccc6dc7c8fe11c78549cdc2f1'
-            '1d713370fe5a8788aa1723ca291ae2f96635b92bc3cb80aea85d21847c59ed6d')
+            '1d713370fe5a8788aa1723ca291ae2f96635b92bc3cb80aea85d21847c59ed6d'
+            '7c6277d6ac1d31b0733d2e04600e2304545cede8810afc691142a94c0a517bd1')
 # sha256sums_aarch64=()
 validpgpkeys=('14F26682D0916CDD81E37B6D61B7B526D98F0353') # Mozilla Software Releases <release@mozilla.com>
 
@@ -148,6 +150,12 @@ fi
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1530052
   # patch -Np1 -i ${srcdir}/0001-Use-remoting-name-for-GDK-application-names.patch
 
+  # temporary workaround to build with glibc-2.36
+  # this is not beautiful
+  local _glibc_minor=$(pacman -Qi glibc | grep Version | sed -e 's/Version[[:space:]]*:[[:space:]][0-9]\.\(.*\)-[0-9]/\1/')
+  if [ "${_glibc_minor}" -gt 35 ]; then
+    patch -Np1 -i ../glibc236.patch
+  fi
   # Unbreak build with python-zstandard 0.18.0
   patch -Np1 -i ../zstandard-0.18.0.diff
 
