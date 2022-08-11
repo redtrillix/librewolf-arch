@@ -151,7 +151,13 @@ fi
   # patch -Np1 -i ${srcdir}/0001-Use-remoting-name-for-GDK-application-names.patch
 
   # Unbreak build with glibc 2.36
-  patch -Np1 -i ../arc4random.diff
+
+  # needs to be kept until alarm/manjaro aarch64 also have switched to 36
+  # this is not beautiful
+  local _glibc_minor=$(pacman -Qi glibc | grep Version | sed -e 's/Version[[:space:]]*:[[:space:]][0-9]\.\(.*\)-[0-9]/\1/')
+  if [ "${_glibc_minor}" -gt 35 ]; then
+    patch -Np1 -i ../arc4random.diff
+  fi
 
   # Unbreak build with python-zstandard 0.18.0
   patch -Np1 -i ../zstandard-0.18.0.diff
