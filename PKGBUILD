@@ -1,5 +1,4 @@
 # Maintainer: ohfp/lsf <lsf at pfho dot net>
-# vim:set sts=2 sw=2 et:
 
 pkgname=librewolf
 _pkgname=LibreWolf
