@@ -228,10 +228,6 @@ fi
   # Disabling Pocket
   patch -Np1 -i ${_patches_dir}/sed-patches/disable-pocket.patch
 
-  # Remove Internal Plugin Certificates
-  # patch -Np1 -i ${_patches_dir}/sed-patches/remove-internal-plugin-certs.patch
-  # => breaks profiled builds since 90.0, it seems
-
   # allow SearchEngines option in non-ESR builds
   patch -Np1 -i ${_patches_dir}/sed-patches/allow-searchengines-non-esr.patch
 
@@ -245,6 +241,9 @@ fi
   # Assorted patches
   patch -Np1 -i ${_patches_dir}/context-menu.patch
   patch -Np1 -i ${_patches_dir}/urlbarprovider-interventions.patch
+
+# allow enabling JPEG XL in non-nightly browser
+  patch -Np1 -i ${_patches_dir}/allow-JXL-in-non-nightly-browser.patch
 
   # change some hardcoded directory strings that could lead to unnecessarily
   # created directories
