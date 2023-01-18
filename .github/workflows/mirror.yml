@@ -17,12 +17,6 @@ jobs:
         repository: git@gitlab.com:librewolf-community/browser/arch.git
         token: ${{ secrets.GITLAB_TOKEN }}
 
-    - name: Setup Git
-      uses: actions/setup-git@v2
-      with:
-        git_user_email: zachary.gethin@destronia.com
-        git_user_name: redtrillix
-
     - name: Push to GitHub
       run: |
         git remote add origin git@github.com:redtrillix/librewolf-arch.git
