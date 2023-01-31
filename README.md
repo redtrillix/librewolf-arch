@@ -1,4 +1,4 @@
-## The official Arch Linux Package Build for the LibreWolf Browser
+## Arch Linux Package Build for the LibreWolf Browser
 
 ### Building from source
 
@@ -9,7 +9,7 @@ If you still want to build it yourself, follow the steps below.
 
 First clone and enter this repository:
 
-`git clone https://gitlab.com/librewolf-community/browser/arch.git && cd arch/`
+`git clone https://github.com/redtrillix/librewolf-arch.git && cd arch/`
 
 Then import Mozilla's GPG key:
 
